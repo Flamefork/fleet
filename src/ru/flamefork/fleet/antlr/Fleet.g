@@ -27,10 +27,10 @@ embed:
 	text? (slipway text?)*;
 
 slipway:
-	SLIPWAY_OPEN^ template SLIPWAY_CLOSE;
+	SLIPWAY_OPEN^ template SLIPWAY_CLOSE!;
 
 spaceship:
-	SPACESHIP_OPEN^ embed SPACESHIP_CLOSE;
+	SPACESHIP_OPEN^ embed SPACESHIP_CLOSE!;
 
 text:
 	(options{greedy=false;}: CHAR)+;
