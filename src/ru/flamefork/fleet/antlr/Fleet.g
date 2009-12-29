@@ -1,5 +1,9 @@
 grammar Fleet;
 
+options {
+	output = AST;
+}
+
 @lexer::header {
     package ru.flamefork.fleet.antlr;
 }
@@ -13,27 +17,41 @@ grammar Fleet;
 }
 
 input:
-	text? (embed text?)* ;
+	template;
+
+template:
+	text? (spaceship text?)*;
 
 embed:
-	EM_OPEN text? EM_CLOSE;
+	text? (sleepway text?)*;
+
+sleepway:
+	SLIPWAY_OPEN^ template SLIPWAY_CLOSE;
+
+spaceship:
+	SPACESHIP_OPEN^ embed SPACESHIP_CLOSE;
 
 text:
 	(options{greedy=false;}: CHAR)+;
 
-EM_OPEN:
+SPACESHIP_OPEN:
 	{ !em }?=>
-	(SPACESHIP_OPEN | SLIPWAY_CLOSE)
+	'<('
 	{ em = true; };
 	
-EM_CLOSE:
+SPACESHIP_CLOSE:
 	{ em }?=>
-	(SPACESHIP_CLOSE | SLIPWAY_OPEN)
+	')>'
 	{ em = false; };
 
-fragment SPACESHIP_OPEN:  '<(';
-fragment SPACESHIP_CLOSE: ')>';
-fragment SLIPWAY_OPEN:  '">';
-fragment SLIPWAY_CLOSE: '<"';
+SLIPWAY_OPEN:
+	{ em }?=>
+	'">'
+	{ em = false; };
 
+SLIPWAY_CLOSE:
+	{ !em }?=>
+	'<"'
+	{ em = true; };
+	
 CHAR: .;
