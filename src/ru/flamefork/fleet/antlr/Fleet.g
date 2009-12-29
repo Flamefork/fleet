@@ -23,9 +23,9 @@ template:
 	text? (spaceship text?)*;
 
 embed:
-	text? (sleepway text?)*;
+	text? (slipway text?)*;
 
-sleepway:
+slipway:
 	SLIPWAY_OPEN^ template SLIPWAY_CLOSE;
 
 spaceship:
