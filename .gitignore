@@ -1,3 +1,7 @@
 README.html
+lib/*
+
+*.iml
+.idea
 
 .DS_Store
