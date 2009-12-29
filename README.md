@@ -52,39 +52,6 @@ Also Spaceship with Slipway attached concidered `raw` by default.
 ## Examples
 
 Template file (`post_dedicated.fleet`):
-    <head>
-      <title><(post :title)></title>
-
-      <(stylesheet :main)>
-      <(raw "<script>alert('Hello!')</script>")>
-    </head>
-    <body>
-    
-    <p><(str notice)></p>
-    
-    <(comment Begin of post)>
-    <(inside-frame (let [p post] ">
-      Author: <(p :author)><br/>
-      Date: <(p :date)><br/>
-    <"))>
-
-    <p><(post :body)></p>
-    <ul>
-      <(for [tag (post :tags] ">
-        <li><(tag)></li>
-      <")>
-    </ul>
-    <(comment End of post)>
-
-    <(footer)>
-    </body>
-    </html>
+<script src="http://gist.github.com/265042.js"></script>
 Clojure:
-    (def footer (fleet "<p>&copy; <(.get (Calendar/getInstance) Calendar/YEAR)> Flamefork</p>"))
-
-    (deftemplate post-page [post] "post_dedicated")
-    
-    (footer)
-
-    (post-page p)
-
+<script src="http://gist.github.com/265043.js"></script>
