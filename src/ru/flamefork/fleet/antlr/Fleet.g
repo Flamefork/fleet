@@ -5,15 +5,16 @@ options {
 }
 
 @lexer::header {
-    package ru.flamefork.fleet.antlr;
+	package ru.flamefork.fleet.antlr;
 }
 
 @header {
-    package ru.flamefork.fleet.antlr;
+	package ru.flamefork.fleet.antlr;
 }
 
 @lexer::members {
-    boolean em = false;
+	// Embed mode
+	boolean em = false;
 }
 
 input:
