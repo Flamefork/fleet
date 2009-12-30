@@ -1,6 +1,6 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 Fleet.g 2009-12-30 02:50:23
+// $ANTLR 3.2 Sep 23, 2009 14:05:07 ru/flamefork/fleet/Fleet.g 2009-12-31 02:14:54
 
-	package ru.flamefork.fleet.antlr;
+	package ru.flamefork.fleet;
 
 
 import org.antlr.runtime.*;
@@ -31,15 +31,15 @@ public class FleetLexer extends Lexer {
         super(input,state);
 
     }
-    public String getGrammarFileName() { return "Fleet.g"; }
+    public String getGrammarFileName() { return "ru/flamefork/fleet/Fleet.g"; }
 
     // $ANTLR start "SPACESHIP_OPEN"
     public final void mSPACESHIP_OPEN() throws RecognitionException {
         try {
             int _type = SPACESHIP_OPEN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Fleet.g:38:15: ({...}? => '<(' )
-            // Fleet.g:39:2: {...}? => '<('
+            // ru/flamefork/fleet/Fleet.g:38:15: ({...}? => '<(' )
+            // ru/flamefork/fleet/Fleet.g:39:2: {...}? => '<('
             {
             if ( !(( !em )) ) {
                 throw new FailedPredicateException(input, "SPACESHIP_OPEN", " !em ");
@@ -63,8 +63,8 @@ public class FleetLexer extends Lexer {
         try {
             int _type = SPACESHIP_CLOSE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Fleet.g:43:16: ({...}? => ')>' )
-            // Fleet.g:44:2: {...}? => ')>'
+            // ru/flamefork/fleet/Fleet.g:43:16: ({...}? => ')>' )
+            // ru/flamefork/fleet/Fleet.g:44:2: {...}? => ')>'
             {
             if ( !(( em )) ) {
                 throw new FailedPredicateException(input, "SPACESHIP_CLOSE", " em ");
@@ -88,8 +88,8 @@ public class FleetLexer extends Lexer {
         try {
             int _type = SLIPWAY_OPEN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Fleet.g:48:13: ({...}? => '\">' )
-            // Fleet.g:49:2: {...}? => '\">'
+            // ru/flamefork/fleet/Fleet.g:48:13: ({...}? => '\">' )
+            // ru/flamefork/fleet/Fleet.g:49:2: {...}? => '\">'
             {
             if ( !(( em )) ) {
                 throw new FailedPredicateException(input, "SLIPWAY_OPEN", " em ");
@@ -113,8 +113,8 @@ public class FleetLexer extends Lexer {
         try {
             int _type = SLIPWAY_CLOSE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Fleet.g:53:14: ({...}? => '<\"' )
-            // Fleet.g:54:2: {...}? => '<\"'
+            // ru/flamefork/fleet/Fleet.g:53:14: ({...}? => '<\"' )
+            // ru/flamefork/fleet/Fleet.g:54:2: {...}? => '<\"'
             {
             if ( !(( !em )) ) {
                 throw new FailedPredicateException(input, "SLIPWAY_CLOSE", " !em ");
@@ -138,8 +138,8 @@ public class FleetLexer extends Lexer {
         try {
             int _type = CHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Fleet.g:58:5: ( . )
-            // Fleet.g:58:7: .
+            // ru/flamefork/fleet/Fleet.g:58:5: ( . )
+            // ru/flamefork/fleet/Fleet.g:58:7: .
             {
             matchAny(); 
 
@@ -154,7 +154,7 @@ public class FleetLexer extends Lexer {
     // $ANTLR end "CHAR"
 
     public void mTokens() throws RecognitionException {
-        // Fleet.g:1:8: ( SPACESHIP_OPEN | SPACESHIP_CLOSE | SLIPWAY_OPEN | SLIPWAY_CLOSE | CHAR )
+        // ru/flamefork/fleet/Fleet.g:1:8: ( SPACESHIP_OPEN | SPACESHIP_CLOSE | SLIPWAY_OPEN | SLIPWAY_CLOSE | CHAR )
         int alt1=5;
         int LA1_0 = input.LA(1);
 
@@ -199,35 +199,35 @@ public class FleetLexer extends Lexer {
         }
         switch (alt1) {
             case 1 :
-                // Fleet.g:1:10: SPACESHIP_OPEN
+                // ru/flamefork/fleet/Fleet.g:1:10: SPACESHIP_OPEN
                 {
                 mSPACESHIP_OPEN(); 
 
                 }
                 break;
             case 2 :
-                // Fleet.g:1:25: SPACESHIP_CLOSE
+                // ru/flamefork/fleet/Fleet.g:1:25: SPACESHIP_CLOSE
                 {
                 mSPACESHIP_CLOSE(); 
 
                 }
                 break;
             case 3 :
-                // Fleet.g:1:41: SLIPWAY_OPEN
+                // ru/flamefork/fleet/Fleet.g:1:41: SLIPWAY_OPEN
                 {
                 mSLIPWAY_OPEN(); 
 
                 }
                 break;
             case 4 :
-                // Fleet.g:1:54: SLIPWAY_CLOSE
+                // ru/flamefork/fleet/Fleet.g:1:54: SLIPWAY_CLOSE
                 {
                 mSLIPWAY_CLOSE(); 
 
                 }
                 break;
             case 5 :
-                // Fleet.g:1:68: CHAR
+                // ru/flamefork/fleet/Fleet.g:1:68: CHAR
                 {
                 mCHAR(); 
 

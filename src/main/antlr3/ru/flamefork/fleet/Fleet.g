@@ -5,11 +5,11 @@ options {
 }
 
 @lexer::header {
-	package ru.flamefork.fleet.antlr;
+	package ru.flamefork.fleet;
 }
 
 @header {
-	package ru.flamefork.fleet.antlr;
+	package ru.flamefork.fleet;
 }
 
 @lexer::members {
@@ -33,7 +33,7 @@ spaceship:
 	SPACESHIP_OPEN^ embed SPACESHIP_CLOSE!;
 
 text:
-	(options{greedy=false;}: CHAR)+ -> CHARS;
+	CHAR^ (options{greedy=false;}: CHAR)*;
 
 SPACESHIP_OPEN:
 	{ !em }?=>
@@ -56,5 +56,3 @@ SLIPWAY_CLOSE:
 	{ em = true; };
 	
 CHAR: .;
-
-fragment CHARS: CHAR+;

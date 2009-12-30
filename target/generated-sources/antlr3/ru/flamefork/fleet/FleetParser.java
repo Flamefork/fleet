@@ -1,6 +1,6 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 Fleet.g 2009-12-30 02:50:23
+// $ANTLR 3.2 Sep 23, 2009 14:05:07 ru/flamefork/fleet/Fleet.g 2009-12-31 02:14:54
 
-	package ru.flamefork.fleet.antlr;
+	package ru.flamefork.fleet;
 
 
 import org.antlr.runtime.*;
@@ -44,7 +44,7 @@ public class FleetParser extends Parser {
     }
 
     public String[] getTokenNames() { return FleetParser.tokenNames; }
-    public String getGrammarFileName() { return "Fleet.g"; }
+    public String getGrammarFileName() { return "ru/flamefork/fleet/Fleet.g"; }
 
 
     public static class input_return extends ParserRuleReturnScope {
@@ -53,7 +53,7 @@ public class FleetParser extends Parser {
     };
 
     // $ANTLR start "input"
-    // Fleet.g:20:1: input : template ;
+    // ru/flamefork/fleet/Fleet.g:20:1: input : template ;
     public final FleetParser.input_return input() throws RecognitionException {
         FleetParser.input_return retval = new FleetParser.input_return();
         retval.start = input.LT(1);
@@ -65,8 +65,8 @@ public class FleetParser extends Parser {
 
 
         try {
-            // Fleet.g:20:6: ( template )
-            // Fleet.g:21:2: template
+            // ru/flamefork/fleet/Fleet.g:20:6: ( template )
+            // ru/flamefork/fleet/Fleet.g:21:2: template
             {
             root_0 = (Object)adaptor.nil();
 
@@ -103,7 +103,7 @@ public class FleetParser extends Parser {
     };
 
     // $ANTLR start "template"
-    // Fleet.g:23:1: template : ( text )? ( spaceship ( text )? )* ;
+    // ru/flamefork/fleet/Fleet.g:23:1: template : ( text )? ( spaceship ( text )? )* ;
     public final FleetParser.template_return template() throws RecognitionException {
         FleetParser.template_return retval = new FleetParser.template_return();
         retval.start = input.LT(1);
@@ -119,21 +119,24 @@ public class FleetParser extends Parser {
 
 
         try {
-            // Fleet.g:23:9: ( ( text )? ( spaceship ( text )? )* )
-            // Fleet.g:24:2: ( text )? ( spaceship ( text )? )*
+            // ru/flamefork/fleet/Fleet.g:23:9: ( ( text )? ( spaceship ( text )? )* )
+            // ru/flamefork/fleet/Fleet.g:24:2: ( text )? ( spaceship ( text )? )*
             {
             root_0 = (Object)adaptor.nil();
 
-            // Fleet.g:24:2: ( text )?
+            // ru/flamefork/fleet/Fleet.g:24:2: ( text )?
             int alt1=2;
-            int LA1_0 = input.LA(1);
-
-            if ( (LA1_0==CHAR) ) {
-                alt1=1;
+            switch ( input.LA(1) ) {
+                case CHAR:
+                    {
+                    alt1=1;
+                    }
+                    break;
             }
+
             switch (alt1) {
                 case 1 :
-                    // Fleet.g:24:2: text
+                    // ru/flamefork/fleet/Fleet.g:24:2: text
                     {
                     pushFollow(FOLLOW_text_in_template55);
                     text2=text();
@@ -147,20 +150,22 @@ public class FleetParser extends Parser {
 
             }
 
-            // Fleet.g:24:8: ( spaceship ( text )? )*
+            // ru/flamefork/fleet/Fleet.g:24:8: ( spaceship ( text )? )*
             loop3:
             do {
                 int alt3=2;
-                int LA3_0 = input.LA(1);
-
-                if ( (LA3_0==SPACESHIP_OPEN) ) {
+                switch ( input.LA(1) ) {
+                case SPACESHIP_OPEN:
+                    {
                     alt3=1;
-                }
+                    }
+                    break;
 
+                }
 
                 switch (alt3) {
             	case 1 :
-            	    // Fleet.g:24:9: spaceship ( text )?
+            	    // ru/flamefork/fleet/Fleet.g:24:9: spaceship ( text )?
             	    {
             	    pushFollow(FOLLOW_spaceship_in_template59);
             	    spaceship3=spaceship();
@@ -168,16 +173,19 @@ public class FleetParser extends Parser {
             	    state._fsp--;
 
             	    adaptor.addChild(root_0, spaceship3.getTree());
-            	    // Fleet.g:24:19: ( text )?
+            	    // ru/flamefork/fleet/Fleet.g:24:19: ( text )?
             	    int alt2=2;
-            	    int LA2_0 = input.LA(1);
-
-            	    if ( (LA2_0==CHAR) ) {
-            	        alt2=1;
+            	    switch ( input.LA(1) ) {
+            	        case CHAR:
+            	            {
+            	            alt2=1;
+            	            }
+            	            break;
             	    }
+
             	    switch (alt2) {
             	        case 1 :
-            	            // Fleet.g:24:19: text
+            	            // ru/flamefork/fleet/Fleet.g:24:19: text
             	            {
             	            pushFollow(FOLLOW_text_in_template61);
             	            text4=text();
@@ -227,7 +235,7 @@ public class FleetParser extends Parser {
     };
 
     // $ANTLR start "embed"
-    // Fleet.g:26:1: embed : ( text )? ( slipway ( text )? )* ;
+    // ru/flamefork/fleet/Fleet.g:26:1: embed : ( text )? ( slipway ( text )? )* ;
     public final FleetParser.embed_return embed() throws RecognitionException {
         FleetParser.embed_return retval = new FleetParser.embed_return();
         retval.start = input.LT(1);
@@ -243,21 +251,24 @@ public class FleetParser extends Parser {
 
 
         try {
-            // Fleet.g:26:6: ( ( text )? ( slipway ( text )? )* )
-            // Fleet.g:27:2: ( text )? ( slipway ( text )? )*
+            // ru/flamefork/fleet/Fleet.g:26:6: ( ( text )? ( slipway ( text )? )* )
+            // ru/flamefork/fleet/Fleet.g:27:2: ( text )? ( slipway ( text )? )*
             {
             root_0 = (Object)adaptor.nil();
 
-            // Fleet.g:27:2: ( text )?
+            // ru/flamefork/fleet/Fleet.g:27:2: ( text )?
             int alt4=2;
-            int LA4_0 = input.LA(1);
-
-            if ( (LA4_0==CHAR) ) {
-                alt4=1;
+            switch ( input.LA(1) ) {
+                case CHAR:
+                    {
+                    alt4=1;
+                    }
+                    break;
             }
+
             switch (alt4) {
                 case 1 :
-                    // Fleet.g:27:2: text
+                    // ru/flamefork/fleet/Fleet.g:27:2: text
                     {
                     pushFollow(FOLLOW_text_in_embed72);
                     text5=text();
@@ -271,20 +282,22 @@ public class FleetParser extends Parser {
 
             }
 
-            // Fleet.g:27:8: ( slipway ( text )? )*
+            // ru/flamefork/fleet/Fleet.g:27:8: ( slipway ( text )? )*
             loop6:
             do {
                 int alt6=2;
-                int LA6_0 = input.LA(1);
-
-                if ( (LA6_0==SLIPWAY_OPEN) ) {
+                switch ( input.LA(1) ) {
+                case SLIPWAY_OPEN:
+                    {
                     alt6=1;
-                }
+                    }
+                    break;
 
+                }
 
                 switch (alt6) {
             	case 1 :
-            	    // Fleet.g:27:9: slipway ( text )?
+            	    // ru/flamefork/fleet/Fleet.g:27:9: slipway ( text )?
             	    {
             	    pushFollow(FOLLOW_slipway_in_embed76);
             	    slipway6=slipway();
@@ -292,16 +305,19 @@ public class FleetParser extends Parser {
             	    state._fsp--;
 
             	    adaptor.addChild(root_0, slipway6.getTree());
-            	    // Fleet.g:27:17: ( text )?
+            	    // ru/flamefork/fleet/Fleet.g:27:17: ( text )?
             	    int alt5=2;
-            	    int LA5_0 = input.LA(1);
-
-            	    if ( (LA5_0==CHAR) ) {
-            	        alt5=1;
+            	    switch ( input.LA(1) ) {
+            	        case CHAR:
+            	            {
+            	            alt5=1;
+            	            }
+            	            break;
             	    }
+
             	    switch (alt5) {
             	        case 1 :
-            	            // Fleet.g:27:17: text
+            	            // ru/flamefork/fleet/Fleet.g:27:17: text
             	            {
             	            pushFollow(FOLLOW_text_in_embed78);
             	            text7=text();
@@ -351,7 +367,7 @@ public class FleetParser extends Parser {
     };
 
     // $ANTLR start "slipway"
-    // Fleet.g:29:1: slipway : SLIPWAY_OPEN template SLIPWAY_CLOSE ;
+    // ru/flamefork/fleet/Fleet.g:29:1: slipway : SLIPWAY_OPEN template SLIPWAY_CLOSE ;
     public final FleetParser.slipway_return slipway() throws RecognitionException {
         FleetParser.slipway_return retval = new FleetParser.slipway_return();
         retval.start = input.LT(1);
@@ -367,8 +383,8 @@ public class FleetParser extends Parser {
         Object SLIPWAY_CLOSE10_tree=null;
 
         try {
-            // Fleet.g:29:8: ( SLIPWAY_OPEN template SLIPWAY_CLOSE )
-            // Fleet.g:30:2: SLIPWAY_OPEN template SLIPWAY_CLOSE
+            // ru/flamefork/fleet/Fleet.g:29:8: ( SLIPWAY_OPEN template SLIPWAY_CLOSE )
+            // ru/flamefork/fleet/Fleet.g:30:2: SLIPWAY_OPEN template SLIPWAY_CLOSE
             {
             root_0 = (Object)adaptor.nil();
 
@@ -410,7 +426,7 @@ public class FleetParser extends Parser {
     };
 
     // $ANTLR start "spaceship"
-    // Fleet.g:32:1: spaceship : SPACESHIP_OPEN embed SPACESHIP_CLOSE ;
+    // ru/flamefork/fleet/Fleet.g:32:1: spaceship : SPACESHIP_OPEN embed SPACESHIP_CLOSE ;
     public final FleetParser.spaceship_return spaceship() throws RecognitionException {
         FleetParser.spaceship_return retval = new FleetParser.spaceship_return();
         retval.start = input.LT(1);
@@ -426,8 +442,8 @@ public class FleetParser extends Parser {
         Object SPACESHIP_CLOSE13_tree=null;
 
         try {
-            // Fleet.g:32:10: ( SPACESHIP_OPEN embed SPACESHIP_CLOSE )
-            // Fleet.g:33:2: SPACESHIP_OPEN embed SPACESHIP_CLOSE
+            // ru/flamefork/fleet/Fleet.g:32:10: ( SPACESHIP_OPEN embed SPACESHIP_CLOSE )
+            // ru/flamefork/fleet/Fleet.g:33:2: SPACESHIP_OPEN embed SPACESHIP_CLOSE
             {
             root_0 = (Object)adaptor.nil();
 
@@ -469,7 +485,7 @@ public class FleetParser extends Parser {
     };
 
     // $ANTLR start "text"
-    // Fleet.g:35:1: text : ( options {greedy=false; } : CHAR )+ ;
+    // ru/flamefork/fleet/Fleet.g:35:1: text : CHAR ( options {greedy=false; } : CHAR )* ;
     public final FleetParser.text_return text() throws RecognitionException {
         FleetParser.text_return retval = new FleetParser.text_return();
         retval.start = input.LT(1);
@@ -477,49 +493,58 @@ public class FleetParser extends Parser {
         Object root_0 = null;
 
         Token CHAR14=null;
+        Token CHAR15=null;
 
         Object CHAR14_tree=null;
+        Object CHAR15_tree=null;
 
         try {
-            // Fleet.g:35:5: ( ( options {greedy=false; } : CHAR )+ )
-            // Fleet.g:36:2: ( options {greedy=false; } : CHAR )+
+            // ru/flamefork/fleet/Fleet.g:35:5: ( CHAR ( options {greedy=false; } : CHAR )* )
+            // ru/flamefork/fleet/Fleet.g:36:2: CHAR ( options {greedy=false; } : CHAR )*
             {
             root_0 = (Object)adaptor.nil();
 
-            // Fleet.g:36:2: ( options {greedy=false; } : CHAR )+
-            int cnt7=0;
+            CHAR14=(Token)match(input,CHAR,FOLLOW_CHAR_in_text117); 
+            CHAR14_tree = (Object)adaptor.create(CHAR14);
+            root_0 = (Object)adaptor.becomeRoot(CHAR14_tree, root_0);
+
+            // ru/flamefork/fleet/Fleet.g:36:8: ( options {greedy=false; } : CHAR )*
             loop7:
             do {
                 int alt7=2;
-                int LA7_0 = input.LA(1);
-
-                if ( (LA7_0==CHAR) ) {
+                switch ( input.LA(1) ) {
+                case CHAR:
+                    {
                     alt7=1;
-                }
-                else if ( (LA7_0==EOF||(LA7_0>=SLIPWAY_OPEN && LA7_0<=SPACESHIP_CLOSE)) ) {
+                    }
+                    break;
+                case EOF:
+                case SLIPWAY_OPEN:
+                case SLIPWAY_CLOSE:
+                case SPACESHIP_OPEN:
+                case SPACESHIP_CLOSE:
+                    {
                     alt7=2;
-                }
+                    }
+                    break;
 
+                }
 
                 switch (alt7) {
             	case 1 :
-            	    // Fleet.g:36:27: CHAR
+            	    // ru/flamefork/fleet/Fleet.g:36:33: CHAR
             	    {
-            	    CHAR14=(Token)match(input,CHAR,FOLLOW_CHAR_in_text126); 
-            	    CHAR14_tree = (Object)adaptor.create(CHAR14);
-            	    adaptor.addChild(root_0, CHAR14_tree);
+            	    CHAR15=(Token)match(input,CHAR,FOLLOW_CHAR_in_text129); 
+            	    CHAR15_tree = (Object)adaptor.create(CHAR15);
+            	    adaptor.addChild(root_0, CHAR15_tree);
 
 
             	    }
             	    break;
 
             	default :
-            	    if ( cnt7 >= 1 ) break loop7;
-                        EarlyExitException eee =
-                            new EarlyExitException(7, input);
-                        throw eee;
+            	    break loop7;
                 }
-                cnt7++;
             } while (true);
 
 
@@ -561,6 +586,7 @@ public class FleetParser extends Parser {
     public static final BitSet FOLLOW_SPACESHIP_OPEN_in_spaceship103 = new BitSet(new long[]{0x0000000000000190L});
     public static final BitSet FOLLOW_embed_in_spaceship106 = new BitSet(new long[]{0x0000000000000080L});
     public static final BitSet FOLLOW_SPACESHIP_CLOSE_in_spaceship108 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CHAR_in_text126 = new BitSet(new long[]{0x0000000000000102L});
+    public static final BitSet FOLLOW_CHAR_in_text117 = new BitSet(new long[]{0x0000000000000102L});
+    public static final BitSet FOLLOW_CHAR_in_text129 = new BitSet(new long[]{0x0000000000000102L});
 
 }
