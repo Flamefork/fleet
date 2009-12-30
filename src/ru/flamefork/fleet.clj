@@ -4,29 +4,26 @@
     [ru.flamefork.fleet.antlr FleetLexer FleetParser])
   (:use [clojure.contrib.seq-utils :only (partition-by)]))
 
-(defmulti transform-group
+(defmulti consume
   "Convert functions for various node types"
-  #(.getType (first %)))
+  #(.getType %))
 
 (defn- children
   "Converts ANTLR Tree to Fleet AST"
   [tree]
-  (map transform-group
-    (partition-by
-      #(.getType %)
-      (.getChildren tree))))
+  (map consume (.getChildren tree)))
 
-(defmethod transform-group FleetParser/CHAR
-  [group]
-  (apply str group))
+(defmethod consume FleetParser/CHARS
+  [token]
+  token)
 
-(defmethod transform-group FleetParser/SPACESHIP_OPEN
-  [group]
-  [:spaceship (children (first group))])
+(defmethod consume FleetParser/SPACESHIP_OPEN
+  [token]
+  [:embed (children token)])
 
-(defmethod transform-group FleetParser/SLIPWAY_OPEN
-  [group]
-  [:slipway (children (first group))])
+(defmethod consume FleetParser/SLIPWAY_OPEN
+  [token]
+  [:tpl (children token)])
 
 (defn- tokenize
   "Builds ANTLR Tree from String"

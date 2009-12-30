@@ -33,7 +33,7 @@ spaceship:
 	SPACESHIP_OPEN^ embed SPACESHIP_CLOSE!;
 
 text:
-	(options{greedy=false;}: CHAR)+;
+	(options{greedy=false;}: CHAR)+ -> CHARS;
 
 SPACESHIP_OPEN:
 	{ !em }?=>
@@ -56,3 +56,5 @@ SLIPWAY_CLOSE:
 	{ em = true; };
 	
 CHAR: .;
+
+fragment CHARS: CHAR+;
