@@ -4,8 +4,14 @@ Fleet is a FLExiblE Templates for Clojure.
 
 ## Status
 
-Desinging language and API right now here in readme file. There is no implementation yet, but
-I make decisions not just dreaming of language features :) but trying to keep in mind implementation possibility and complexity.
+0. `DONE` Language design
+0. `DONE` API design
+0. `DONE` Parser
+0. Compiler
+0. Infrastructure
+0. Cleanup
+
+`DONE` = First draft / first working version :)
 
 ## API
 
