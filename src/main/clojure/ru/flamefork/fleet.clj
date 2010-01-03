@@ -1,5 +1,5 @@
 (ns ru.flamefork.fleet
-  (:use [ru.flamefork.fleet.tokenizer]))
+  (:use [ru.flamefork.fleet.parser]))
 
 (defn process
   "Compile template from AST"
@@ -10,4 +10,4 @@
 (defn fleet
   "Creates anonymous function from template containing in template-str"
   [template-str]
-  (-> template-str tokenize process))
+  (-> template-str parse process))

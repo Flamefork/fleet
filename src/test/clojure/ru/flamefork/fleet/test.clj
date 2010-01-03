@@ -1,8 +1,9 @@
 (ns ru.flamefork.fleet
-  (:use clojure.test))
+  (:use clojure.test)
+  (:use clojure.contrib.pprint))
 
 (deftest basics
-  (println (fleet
+  (pprint (fleet
 "<p><(post :body)></p>
 <ul>
   <(for [tag (post :tags] \">
