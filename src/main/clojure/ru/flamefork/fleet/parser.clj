@@ -2,38 +2,32 @@
   (:import
     [org.antlr.runtime Token ANTLRStringStream CommonTokenStream]
     [ru.flamefork.fleet FleetLexer FleetParser])
-  (:use [clojure.contrib.seq-utils :only (partition-by)]))
+  (:use [clojure.contrib.def]))
 
-(defstruct node
-  :type :children)
+(defmacro- jmap [method coll]
+  `(map (fn [object#] (~method object#)) ~coll))
 
-(defmulti consume
-  "Convert functions for various node types"
-  #(.getType %))
+(defn- with-children
+  [token]
+  (cons token (.getChildren token)))
 
-(defn children
+(defn- consume)
+
+(defn- children
   "Converts ANTLR Tree to Fleet AST"
-  [tree]
-  (map consume (.getChildren tree)))
-
-(defmethod consume FleetParser/CHAR
   [token]
-  (struct node
-    :text
-    ; transforming token tree "A->(B C D E)" to node with string ABCDE
-    (apply str (map #(.getText %) (cons token (.getChildren token))))))
+  (map consume (.getChildren token)))
 
-(defmethod consume FleetParser/SPACESHIP_OPEN
-  [token]
-  (struct node
-    :embed
-    (children token)))
+(defvar- consumers {
+  FleetParser/CHAR           [:text  #(apply str (jmap .getText (with-children %)))]
+  FleetParser/SPACESHIP_OPEN [:embed #(children %)]
+  FleetParser/SLIPWAY_OPEN   [:tpl   #(children %)]})
 
-(defmethod consume FleetParser/SLIPWAY_OPEN
+(defn- consume
+  "Convert functions for various node types"
   [token]
-  (struct node
-    :tpl
-    (children token)))
+  (let [c (consumers (.getType token))]
+    [(first c) ((second c) token)]))
 
 (defn parse
   "Builds Fleet AST from String"
@@ -41,5 +35,5 @@
   (let [lexer (FleetLexer. (ANTLRStringStream. template-str))
         parser (FleetParser. (CommonTokenStream. lexer))
         tree (.. parser input getTree)]
-    (children tree)))
+    [:tpl (children tree)]))
 
