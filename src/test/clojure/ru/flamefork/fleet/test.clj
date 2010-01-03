@@ -9,7 +9,7 @@
 "<p><(post :body)></p>
 <ul>
   <(for [tag (post :tags)] \">
-    <li><(tag)></li>
+    <li><(str tag)></li>
   <\")>
 </ul>")))
 
