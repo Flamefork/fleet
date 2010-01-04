@@ -1,5 +1,6 @@
 (ns ru.flamefork.fleet
   (:use
+    [ru.flamefork.fleet.loader]
     [ru.flamefork.fleet.parser]
     [ru.flamefork.fleet.compiler]))
 

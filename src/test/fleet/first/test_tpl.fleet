@@ -1,0 +1,7 @@
+<p><(str title)></p>
+<p><(post :body)></p>
+<ul>
+  <(for [tag (post :tags)] ">
+    <li><(str tag)></li>
+  <")>
+</ul>
