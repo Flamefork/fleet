@@ -7,7 +7,7 @@ Fleet is a FLExiblE Templates for Clojure.
 0. `DONE` Language design
 0. `DONE` API design
 0. `DONE` Parser
-0. Compiler
+0. `DONE` Compiler
 0. Infrastructure
 0. Cleanup
 

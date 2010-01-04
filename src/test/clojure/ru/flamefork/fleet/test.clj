@@ -4,8 +4,9 @@
     [clojure.contrib.pprint]
     [clojure.contrib.def]))
 
-(deftest basics
-  (pprint (fleet
+
+(deftest parse-test
+  (println (parse
 "<p><(post :body)></p>
 <ul>
   <(for [tag (post :tags)] \">
@@ -13,14 +14,12 @@
   <\")>
 </ul>")))
 
-(deftest handmade-compilation
-  (defvar f
-    (partial apply str))
-
-  (println
-    ((fn [post]
-      (f ["<p>" (f (post :body)) "</p>\n<ul>\n"
-                  (f (for [tag (post :tags)]
-                    (f ["<li>" (f (str tag)) "</li>\n"])))
-                  "</ul>"])
-      ) {:body "Body" :tags ["tag1" "tag2" "tag3"]})))
+(deftest compilation
+  (println ((fleet '(post title)
+"<p><(str title)></p>
+<p><(post :body)></p>
+<ul>
+  <(for [tag (post :tags)] \">
+    <li><(str tag)></li>
+  <\")>
+</ul>") {:body "Body" :tags ["tag1" "tag2" "tag3"]} "Post Template")))
