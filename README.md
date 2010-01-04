@@ -8,18 +8,19 @@ Template is function of its arguments that returns string. Nothing more.
 
 ## Why Fleet?
 
-Because 
-- I wanted template engine for Clojure
-- close to Clojure in syntax
-- and I hate writing HTML not in HTML (clj-html, haml, etc).
+Because  
+— I wanted template engine for Clojure  
+— close to Clojure in syntax and style  
+— and I hate writing HTML not in HTML (clj-html, haml, etc).
 
-With pragmatism and aesthetic at the first place
+With pragmatism and aesthetics at the first place
 I reviewed few Clojure and CL implementations of ERB/JSP-like templates. Their syntax looks like  
 `<p><%= (post :body) %></p>`  
 or  
 `<p><?clj (post :body) ?></p>`  
 Also, in order to prevent XSS attacks, one needs to append some `escape-xml` function call to all this code:  
-`<p><%= (escape-html (post :body)) %></p>`
+`<p><%= (escape-html (post :body)) %></p>`  
+A little too much...
 
 Then I realized that the following syntax is usable:  
 `<p><(post :body)></p>`  
