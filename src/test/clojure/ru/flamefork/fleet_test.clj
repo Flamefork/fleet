@@ -7,7 +7,7 @@
   {:body "Body" :tags ["tag1" "tag2" "tag3"]})
 
 (deftest compilation
-  (let [tpl (slurp "src/test/fleet/first/test_tpl.fleet")
+  (let [tpl  (slurp "src/test/fleet/first/test_tpl.fleet")
         html (slurp "src/test/fleet/first/test_tpl.html")]
     (is (=
       ((fleet '(post title) tpl) test-post "Post Template")

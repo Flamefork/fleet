@@ -5,5 +5,5 @@
 
 (deftest parse-test
   (let [tpl (slurp "src/test/fleet/second/post.fleet")
-        ast (read-string (slurp "src/test/fleet/second/post.ast.clj"))]
-    (is (= (parse tpl) ast))))
+        ast (slurp "src/test/fleet/second/post.ast.clj")]
+    (is (= (parse tpl) (read-string ast)))))
