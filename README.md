@@ -2,14 +2,50 @@
 
 Fleet is a FLExiblE Templates for Clojure.
 
-## Status
+## Gist
+
+Template is function of its arguments that returns string. Nothing more.
+
+## Why Fleet?
+
+Because 
+- I wanted template engine for Clojure
+- close to Clojure in syntax
+- and I hate writing HTML not in HTML (clj-html, haml, etc).
+
+With pragmatism and aesthetic at the first place
+I reviewed few Clojure and CL implementations of ERB/JSP-like templates. Their syntax looks like  
+`<p><%= (post :body) %></p>`  
+or  
+`<p><?clj (post :body) ?></p>`  
+Also, in order to prevent XSS attacks, one needs to append some `escape-xml` function call to all this code:  
+`<p><%= (escape-html (post :body)) %></p>`
+
+Then I realized that the following syntax is usable:  
+`<p><(post :body)></p>`  
+Not a big deal, but... that's all. Really, `<%= (escape-html ...` is here, and all other constructions
+are here too.
+
+Rails-like things like  
+`<%= render :partial => 'post', :collection => posts %>`  
+are here too:  
+`<(map post-tpl posts)>`  
+...just plain Clojure code.
+
+Need to bypass escaping?  
+`<(raw "<script>alert('Hello!')</script>")>`  
+Not writing HTML at all? Changing `*fleet-escape-fn*` to e.g. `str` will disable escaping.
+
+## Roadmap
 
 0. `DONE` Language design
 0. `DONE` API design
 0. `DONE` Parser
 0. `DONE` Compiler
-0. Infrastructure
+0. `IN PROGRESS` Infrastructure
+0. Auto HTML-escaping
 0. Cleanup
+0. Reimplement from scratch ;)
 
 `DONE` = First draft / first working version :)
 
@@ -26,6 +62,9 @@ If source is not defined, file `fn_name.fleet` found in one of `*fleet-template-
 
 `*fleet-template-paths*`  
 List of path used for template search.
+
+`*fleet-escape-fn*`  
+Function for escaping XML tags & entities.
 
 ## Template Language
 
