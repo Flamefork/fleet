@@ -4,6 +4,8 @@
     [clojure.contrib.pprint]
     [clojure.contrib.def]))
 
+(def test-post
+  {:body "Body" :tags ["tag1" "tag2" "tag3"]})
 
 (deftest parse-test
   (println (parse
@@ -22,4 +24,9 @@
   <(for [tag (post :tags)] \">
     <li><(str tag)></li>
   <\")>
-</ul>") {:body "Body" :tags ["tag1" "tag2" "tag3"]} "Post Template")))
+</ul>") test-post "Post Template")))
+
+(deftest template
+  (deftemplate single-post
+    [post] "<p><(post :body)></p>")
+  (println (single-post test-post)))

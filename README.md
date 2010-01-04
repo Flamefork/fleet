@@ -15,12 +15,11 @@ Fleet is a FLExiblE Templates for Clojure.
 
 ## API
 
-`(fleet template-str)`  
-Creates anonymous function from template containing in template-str.
-Local bindings will be available in this templates.
+`(fleet '(list of args) template-str)`  
+Creates anonymous function from template-str.
 
-`(deftemplate fn-name [params*] source?)`  
-Creates function with name fn-name and defined params (just a convinient way to set local bindings).  
+`(deftemplate fn-name [& args] source?)`  
+Creates function with name fn-name and defined args.  
 If source is defined, and it's String, it's parsed.  
 If source is defined, and it's Reader, it's read and parsed.  
 If source is not defined, file `fn_name.fleet` found in one of `*fleet-template-paths*` is loaded and parsed.

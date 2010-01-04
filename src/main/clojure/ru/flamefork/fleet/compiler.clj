@@ -32,6 +32,6 @@
   (str "(fn [" (s/join " " args) "] " (consume ast :embed) ")"))
 
 (defn compile-to-fn
-  "Creates anonymous function from AST. Args are '(list of args)."
+  "Creates anonymous function from AST."
   [args ast]
   (eval (read-string (compile-to-str args ast))))
