@@ -3,16 +3,17 @@
     [clojure.test]
     [ru.flamefork.fleet.loader]))
 
-(swap! *fleet-template-paths* conj "src/test/fleet/first")
-(swap! *fleet-template-paths* conj "src/test/fleet/second")
-(swap! *fleet-template-paths* conj "src/test/fleet/third")
+(def paths
+  ["src/test/fleet/first"
+   "src/test/fleet/second"
+   "src/test/fleet/third"])
 
 (deftest find-file-test
   (is (=
-    (.getPath (find-file "post"))
+    (.getPath (find-file "post" paths))
     (.getCanonicalPath (java.io.File. "." "src/test/fleet/second/post.fleet")))))
 
 (deftest failed-find-file-test
   (is (thrown?
     java.io.FileNotFoundException
-    (find-file "not-existing"))))
+    (find-file "not-existing" paths))))

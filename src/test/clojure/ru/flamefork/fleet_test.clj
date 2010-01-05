@@ -25,3 +25,13 @@
   (is (=
     (test-tpl test-post "Post Template")
     (slurp "src/test/fleet/first/test_tpl.html"))))
+
+(deftest load-paths-test
+  (reset! search-paths [])
+  (add-search-path "src/test/fleet/first")
+  (add-search-path "src/test/fleet/second")
+  (add-search-path "src/test/fleet/third")
+  (is (= @search-paths [
+    "src/test/fleet/first"
+    "src/test/fleet/second"
+    "src/test/fleet/third"])))

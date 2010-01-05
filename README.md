@@ -35,7 +35,7 @@ are here too:
 
 Need to bypass escaping?  
 `<(raw "<script>alert('Hello!')</script>")>`  
-Not writing HTML at all? Changing `*fleet-escape-fn*` to e.g. `str` will disable escaping.
+Not writing HTML at all? Changing `escape-fn` to e.g. `str` will disable escaping.
 
 ## Roadmap
 
@@ -43,7 +43,7 @@ Not writing HTML at all? Changing `*fleet-escape-fn*` to e.g. `str` will disable
 0. `DONE` API design
 0. `DONE` Parser
 0. `DONE` Compiler
-0. `IN PROGRESS` Infrastructure
+0. `DONE` Infrastructure
 0. Auto HTML-escaping
 0. Cleanup
 0. Reimplement from scratch ;)
@@ -57,15 +57,14 @@ Creates anonymous function from template-str.
 
 `(deftemplate fn-name [& args] source?)`  
 Creates function with name fn-name and defined args.  
-If source is defined, and it's String, it's parsed.  
-If source is defined, and it's Reader, it's read and parsed.  
-If source is not defined, file `fn_name.fleet` found in one of `*fleet-template-paths*` is loaded and parsed.
+If source is defined, it's parsed as String containing template.  
+If source is not defined, file `fn_name.fleet` found in one of `@search-paths` is loaded and parsed.
 
-`*fleet-template-paths*`  
-List of path used for template search.
+`search-paths`  
+List of paths used for template search (Atom).
 
-`*fleet-escape-fn*`  
-Function for escaping XML tags & entities.
+`escape-fn`  
+Function for escaping XML tags & entities (Atom).
 
 ## Template Language
 

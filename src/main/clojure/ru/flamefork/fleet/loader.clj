@@ -1,17 +1,12 @@
 (ns ru.flamefork.fleet.loader
-  (:use
-    [clojure.contrib.def])
   (:import
     [java.io File]))
 
-(defvar *fleet-template-paths*
-  (atom '("."))
-  "List of path used for template search.")
-
 (defn find-file
-  [name]
+  "Tries to find file with 'name' in 'paths'. Returns first occurence."
+  [name paths]
   (let [filename (str (.replace name \- \_) ".fleet")
-        options (map #(File. % filename) @*fleet-template-paths*)
+        options (map #(File. % filename) paths)
         file (first (filter #(.exists %) options))]
     (if file
       (.getCanonicalFile file)
