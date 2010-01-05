@@ -8,10 +8,11 @@
   (atom '("."))
   "List of path used for template search.")
 
-(defn- make-file
-  [path name]
-  (.getCanonicalFile (new File path (str (.replace name \- \_) ".fleet"))))
-
 (defn find-file
   [name]
-  (first (filter #(.exists %) (map #(make-file % name) @*fleet-template-paths*))))
+  (let [filename (str (.replace name \- \_) ".fleet")
+        options (map #(File. % filename) @*fleet-template-paths*)
+        file (first (filter #(.exists %) options))]
+    (if file
+      (.getCanonicalFile file)
+      (throw (java.io.FileNotFoundException. (str "Fleet template file '" filename "' not found."))))))
