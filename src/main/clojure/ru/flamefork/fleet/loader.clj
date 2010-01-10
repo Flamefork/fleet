@@ -10,4 +10,8 @@
         file (first (filter #(.exists %) options))]
     (if file
       (.getCanonicalFile file)
-      (throw (java.io.FileNotFoundException. (str "Fleet template file '" filename "' not found."))))))
+      (throw (java.io.FileNotFoundException. (str
+        "Fleet template file '" filename "' not found.\nSearch paths:"
+        (if (empty? paths)
+          " <none>"
+          (map #(str "\n" %) paths))))))))
