@@ -29,7 +29,11 @@
 (defn- compile-to-str
   "Compilates template-str into clojure code."
   [args ast]
-  (str "(fn [" (s/join " " args) "] " (consume ast :embed) ")"))
+  (str "
+  (do
+    (use 'ru.flamefork.fleet.runtime)
+    (fn [" (s/join " " args) "]"
+    (consume ast :embed) "))"))
 
 (defn compile-to-fn
   "Creates anonymous function from AST."
