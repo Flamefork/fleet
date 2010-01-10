@@ -10,24 +10,23 @@ Template is function of its arguments that returns string. Nothing more.
 
 Because  
 — I wanted template engine for Clojure  
-— close to Clojure in syntax and style  
+— close to Clojure  
 — and I hate writing HTML not in HTML (clj-html, haml, etc).
 
-With pragmatism and aesthetics at the first place
 I reviewed few Clojure and CL implementations of ERB/JSP-like templates. Their syntax looks like  
 `<p><%= (post :body) %></p>`  
 or  
 `<p><?clj (post :body) ?></p>`  
 Also, in order to prevent XSS attacks, one needs to append some `escape-xml` function call to all this code:  
-`<p><%= (escape-html (post :body)) %></p>`  
-A little too much...
+`<p><%= (escape-html (post :body)) %></p>` or (Rails-like) `<p><%=(h(post :body))%></p>`  
+10 chars `<%=(h())%>` just to safely insert expression value seems to be a little too much...
 
 Then I realized that the following syntax is usable:  
 `<p><(post :body)></p>`  
 Not a big deal, but... that's all. Really, `<%= (escape-html ...` is here, and all other constructions
 are here too.
 
-Rails-like things like  
+Rails-like partials like  
 `<%= render :partial => 'post', :collection => posts %>`  
 are here too:  
 `<(map post-tpl posts)>`  
@@ -44,7 +43,8 @@ Not writing HTML at all? Changing `escape-fn` to e.g. `str` will disable escapin
 0. `DONE` Parser
 0. `DONE` Compiler
 0. `DONE` Infrastructure
-0. Auto HTML-escaping
+0. `IN PROGRESS` Auto HTML-escaping
+0. Recursive load/register templates in specified path 
 0. Cleanup
 0. Reimplement from scratch ;)
 
