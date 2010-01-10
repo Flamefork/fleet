@@ -4,9 +4,6 @@
     [ru.flamefork.fleet FleetLexer FleetParser])
   (:use [clojure.contrib.def]))
 
-(defmacro- jmap [method coll]
-  `(map (fn [object#] (~method object#)) ~coll))
-
 (defn- with-children
   [token]
   (cons token (.getChildren token)))
@@ -19,7 +16,7 @@
   (map consume (.getChildren token)))
 
 (defvar- consumers {
-  FleetParser/CHAR           [:text  #(apply str (jmap .getText (with-children %)))]
+  FleetParser/CHAR           [:text  #(apply str (map (memfn getText) (with-children %)))]
   FleetParser/SPACESHIP_OPEN [:embed #(children %)]
   FleetParser/SLIPWAY_OPEN   [:tpl   #(children %)]})
 
