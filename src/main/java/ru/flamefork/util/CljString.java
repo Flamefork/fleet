@@ -13,7 +13,7 @@ import clojure.lang.Obj;
  * <p>
  * So CljString is only CharSequence.
  */
-public class CljString extends Obj implements java.lang.Comparable<CharSequence>, CharSequence {
+public class CljString extends Obj implements Comparable<CharSequence>, CharSequence {
     private final String s;
 
     public CljString(CharSequence s) {

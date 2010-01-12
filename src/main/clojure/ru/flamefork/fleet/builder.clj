@@ -1,6 +1,7 @@
 (ns ru.flamefork.fleet.builder
   (:use
-    [clojure.contrib.def])
+    [clojure.contrib.def]
+    [ru.flamefork.fleet.runtime])
   (:require
     [clojure.contrib.str-utils2 :as s]))
 
@@ -8,7 +9,7 @@
 
 (defn- gen-children-consumer
   [s1 s2]
-  (fn [ast] (str "(apply str " s1 (apply str (map consume ast)) s2 ")")))
+  (fn [ast] (str "(screen " s1 (screen (map consume ast)) s2 ")")))
 
 (defvar- consumers {
   :text #(str " \"" % "\" ")
