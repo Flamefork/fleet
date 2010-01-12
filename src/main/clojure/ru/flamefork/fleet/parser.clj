@@ -33,8 +33,8 @@
 (defn- consume
   "Convert functions for various node types"
   [mode token]
-  (let [c ((consumers mode) (.getType token))]
-    [(first c) ((second c) token)]))
+  (let [[type consumer] ((consumers mode) (.getType token))]
+    [type (consumer token)]))
 
 (defn parse
   "Builds Fleet AST from String"
