@@ -1,7 +1,6 @@
 package ru.flamefork.util;
 
-import clojure.lang.IPersistentMap;
-import clojure.lang.Obj;
+import clojure.lang.*;
 
 /**
  * Clojure wrapper for String.
@@ -13,20 +12,20 @@ import clojure.lang.Obj;
  * <p>
  * So CljString is only CharSequence.
  */
-public class CljString extends Obj implements Comparable<CharSequence>, CharSequence {
+public class CljString extends Obj implements Comparable<CharSequence>, CharSequence, Seqable {
     private final String s;
 
     public CljString(CharSequence s) {
         this.s = s.toString();
     }
 
-    public CljString(IPersistentMap meta, String s) {
+    public CljString(IPersistentMap meta, CharSequence s) {
         super(meta);
-        this.s = s;
+        this.s = s.toString();
     }
 
     public String toString() {
-        return s.toString();
+        return s;
     }
 
     public boolean equals(Object obj) {
@@ -66,5 +65,13 @@ public class CljString extends Obj implements Comparable<CharSequence>, CharSequ
     
     public Obj withMeta(IPersistentMap meta) {
         return new CljString(meta, s);
+    }
+
+    /*
+    clojure.lang.Seqable implementation
+    */
+    
+    public ISeq seq() {
+        return RT.seq(s);
     }
 }
