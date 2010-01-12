@@ -1,13 +1,13 @@
 [:tpl (
   [:text "<p>"]
   [:embed (
-    [:text "post :body"])]
+    [:clj "post :body"])]
   [:text "</p>\n<ul>\n  "]
   [:embed (
-    [:text "for [tag (post :tags)] "]
+    [:clj "for [tag (post :tags)] "]
     [:tpl (
       [:text "\n    <li>"]
       [:embed (
-        [:text "str tag"])]
+        [:clj "str tag"])]
       [:text "</li>\n  "])])]
   [:text "\n</ul>"])]

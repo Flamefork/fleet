@@ -12,18 +12,28 @@
 
 (defn- children
   "Converts ANTLR Tree to Fleet AST"
+  [mode token]
+  (map (partial consume mode) (.getChildren token)))
+
+(defn- text-consumer
   [token]
-  (map consume (.getChildren token)))
+  (apply str (map (memfn getText) (with-children token))))
 
 (defvar- consumers {
-  FleetParser/CHAR           [:text  #(apply str (map (memfn getText) (with-children %)))]
-  FleetParser/SPACESHIP_OPEN [:embed #(children %)]
-  FleetParser/SLIPWAY_OPEN   [:tpl   #(children %)]})
+  :embed {
+    FleetParser/SLIPWAY_OPEN   [:tpl (partial children :tpl)]
+    FleetParser/CHAR           [:clj text-consumer]
+    }
+  :tpl {
+    FleetParser/SPACESHIP_OPEN [:embed (partial children :embed)]
+    FleetParser/CHAR           [:text text-consumer]
+    }
+  })  
 
 (defn- consume
   "Convert functions for various node types"
-  [token]
-  (let [c (consumers (.getType token))]
+  [mode token]
+  (let [c ((consumers mode) (.getType token))]
     [(first c) ((second c) token)]))
 
 (defn parse
@@ -32,5 +42,5 @@
   (let [lexer (FleetLexer. (ANTLRStringStream. template-str))
         parser (FleetParser. (CommonTokenStream. lexer))
         tree (.. parser input getTree)]
-    [:tpl (children tree)]))
+    [:tpl (children :tpl tree)]))
 

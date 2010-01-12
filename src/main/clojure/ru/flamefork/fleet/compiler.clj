@@ -16,7 +16,7 @@
     :embed (gen-children-consumer "(" ")" :embed)
     }
   :embed {
-    :text  #(str " " % " ")
+    :clj  #(str " " % " ")
     :tpl (gen-children-consumer "[" "]" :tpl)
     }
   })
