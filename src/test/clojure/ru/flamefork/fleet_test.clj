@@ -64,7 +64,6 @@
 (deftest escaping-test
   (deftemplate post-tpl [post])
   (deftemplate posts-tpl [posts])
-  (println (posts-tpl esc-test-posts))
   (is (=
-    (.toString (posts-tpl esc-test-posts))
+    (posts-tpl esc-test-posts)
     (slurp "src/test/fleet/second/esc_posts_tpl.html"))))

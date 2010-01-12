@@ -3,13 +3,6 @@
     [clojure.lang Sequential IObj]
     [ru.flamefork.util CljString]))
 
-;; copied from clojure.contrib.lazy-xml
-(def #^{:private true}
-     escape-xml-map
-     (zipmap "'<>\"&" (map #(str \& % \;) '[apos lt gt quot amp])))
-(defn- escape-xml [text]
-  (apply str (map #(escape-xml-map % %) (.toString text))))
-
 (defn raw
   "Prevent encoding of string."
   [s]
@@ -25,15 +18,12 @@
 
 (defmulti screen
   "Process and collect template string(s)."
-  class)
+  (fn [f s] (class s)))
 
 (defmethod screen CharSequence
-  [s]
-  (raw 
-    (if (raw? s)
-      s
-      (escape-xml s))))
+  [f s]
+  (raw (if (raw? s) s (f s))))
 
 (defmethod screen Sequential
-  [s]
-  (raw (apply str (map screen s))))
+  [f s]
+  (raw (apply str (map (partial screen f) s))))

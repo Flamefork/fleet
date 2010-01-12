@@ -3,6 +3,8 @@
     [clojure.test]
     [ru.flamefork.fleet.runtime]))
 
+(def f @ru.flamefork.fleet/escape-fn)
+
 (deftest raw-test
   (let [s "qwe<br>asd"]
     (is (not (raw? s)))
@@ -11,17 +13,17 @@
 (deftest screen-obj-test
   (let [s "qwe<br>asd"]
     (is (=
-      (screen s)
+      (screen f s)
       "qwe&lt;br&gt;asd"))
     (is (=
-      (screen (raw s))
+      (screen f (raw s))
       "qwe<br>asd"))
-    (is (raw? (screen s)))
-    (is (raw? (screen (raw s))))))
+    (is (raw? (screen f s)))
+    (is (raw? (screen f (raw s))))))
 
 (deftest screen-seq-test
   (let [s ["qwe<br>asd" " " (raw "qwe<br>asd")]]
     (is (=
-      (screen s)
+      (screen f s)
       "qwe&lt;br&gt;asd qwe<br>asd"))
-    (is (raw? (screen s)))))
+    (is (raw? (screen f s)))))

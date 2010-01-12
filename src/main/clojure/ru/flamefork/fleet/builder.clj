@@ -10,8 +10,8 @@
 (defvar- consumers {
   :text  #(raw (str " (raw \"" % "\") "))
   :clj   #(raw (str " " % " "))
-  :embed #(screen ["(screen (" (screen (map consume %)) "))"])
-  :tpl   #(screen ["(screen [" (screen (map consume %)) "])"])
+  :embed #(raw (apply str ["(screen f (" (raw (apply str (map consume %))) "))"]))
+  :tpl   #(raw (apply str ["(screen f [" (raw (apply str (map consume %))) "])"]))
   })
 
 (defn- consume
@@ -26,5 +26,6 @@
   (read-string (str "
   (do
     (use 'ru.flamefork.fleet.runtime)
-    (fn [" (s/join " " args) "]"
-    (consume ast) "))")))
+    (fn [" (s/join " " args) "]
+    (let [f @ru.flamefork.fleet/escape-fn]"
+    (consume ast) ")))")))

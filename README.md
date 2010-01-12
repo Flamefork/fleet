@@ -43,12 +43,13 @@ Not writing HTML at all? Changing `escape-fn` to e.g. `str` will disable escapin
 0. `DONE` Parser
 0. `DONE` Builder
 0. `DONE` Infrastructure
-0. `IN PROGRESS` Auto HTML-escaping
-0. Recursive load/register templates in specified path 
+0. `DONE` Auto HTML-escaping
+0. Recursive load/register templates in specified (class)path
+0. Language contexts: different escaping functions, inflected from filename/ext (e.g. post.html.fleet and post.json.fleet)
 0. Cleanup
 0. Reimplement from scratch ;)
 
-`DONE` = First draft / first working version :)
+`DONE` = First rough version :)
 
 ## API
 

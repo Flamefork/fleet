@@ -12,6 +12,16 @@
   [path]
   (swap! search-paths conj path))
 
+;; copied from clojure.contrib.lazy-xml
+(defvar- escape-xml-map
+     (zipmap "'<>\"&" (map #(str \& % \;) '[apos lt gt quot amp])))
+(defn- escape-xml [text]
+  (apply str (map #(escape-xml-map % %) text)))
+
+(defvar escape-fn
+  (atom escape-xml)
+  "Template escaping function.")
+
 (defn fleet
   "Creates anonymous function from template containing in template-str."
   [args template-str]
