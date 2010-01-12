@@ -1,7 +1,7 @@
 (ns ru.flamefork.fleet
   (:use
     [clojure.contrib.def]
-    [ru.flamefork.fleet loader parser compiler]))
+    [ru.flamefork.fleet loader parser builder]))
 
 (defvar search-paths
   (atom [])
@@ -15,7 +15,7 @@
 (defn fleet
   "Creates anonymous function from template containing in template-str."
   [args template-str]
-  (compile-to-fn args (parse template-str)))
+  (eval (build args (parse template-str))))
 
 (defn- read-template
   [fn-name]

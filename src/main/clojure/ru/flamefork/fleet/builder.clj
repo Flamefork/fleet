@@ -1,4 +1,4 @@
-(ns ru.flamefork.fleet.compiler
+(ns ru.flamefork.fleet.builder
   (:use
     [clojure.contrib.def])
   (:require
@@ -23,16 +23,11 @@
         consumer (type consumers)]
     (consumer content)))
 
-(defn- compile-to-str
-  "Compilates template-str into clojure code."
+(defn build
+  "Build Clojure forms from template-str."
   [args ast]
-  (str "
+  (read-string (str "
   (do
     (use 'ru.flamefork.fleet.runtime)
     (fn [" (s/join " " args) "]"
-    (consume ast) "))"))
-
-(defn compile-to-fn
-  "Creates anonymous function from AST."
-  [args ast]
-  (eval (read-string (compile-to-str args ast))))
+    (consume ast) "))")))
