@@ -7,15 +7,11 @@
 
 (defn- consume)
 
-(defn- gen-children-consumer
-  [s1 s2]
-  (fn [ast] (str "(screen " s1 (screen (map consume ast)) s2 ")")))
-
 (defvar- consumers {
-  :text #(str " \"" % "\" ")
-  :clj  #(str " " % " ")
-  :embed (gen-children-consumer "(" ")")
-  :tpl   (gen-children-consumer "[" "]")
+  :text  #(raw (str " (raw \"" % "\") "))
+  :clj   #(raw (str " " % " "))
+  :embed #(screen ["(screen (" (screen (map consume %)) "))"])
+  :tpl   #(screen ["(screen [" (screen (map consume %)) "])"])
   })
 
 (defn- consume

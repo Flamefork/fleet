@@ -1,7 +1,7 @@
 [:tpl (
   [:text "<p>"]
   [:embed (
-    [:clj "post :body"])]
+    [:clj "raw (post :body)"])]
   [:text "</p>\n<ul>\n  "]
   [:embed (
     [:clj "for [tag (post :tags)] "]

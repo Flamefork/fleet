@@ -2,8 +2,8 @@
   (use 'ru.flamefork.fleet.runtime)
   (fn [post]
     (screen [
-      "<p>" (screen (post :body)) "</p>\n<ul>\n  "
+      (raw "<p>") (screen (raw (post :body))) (raw "</p>\n<ul>\n  ")
       (screen (for [tag (post :tags)]
         (screen [
-          "\n    <li>" (screen (str tag)) "</li>\n  "])))
-      "\n</ul>"])))
+          (raw "\n    <li>") (screen (str tag)) (raw "</li>\n  ")])))
+      (raw "\n</ul>")])))

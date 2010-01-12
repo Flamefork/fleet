@@ -56,3 +56,15 @@
   (is (=
     (posts-tpl test-posts)
     (slurp "src/test/fleet/second/posts_tpl.html"))))
+
+(def esc-test-posts
+  [{:body "Body with \" Quote" :tags ["<evil>tag1</evil>" "tag \"2\"" "tag3"]},
+   {:body "qwe<br>asd<br>zxc"  :tags ["tag1" "tag2"]}])
+
+(deftest escaping-test
+  (deftemplate post-tpl [post])
+  (deftemplate posts-tpl [posts])
+  (println (posts-tpl esc-test-posts))
+  (is (=
+    (.toString (posts-tpl esc-test-posts))
+    (slurp "src/test/fleet/second/esc_posts_tpl.html"))))

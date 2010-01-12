@@ -1,4 +1,4 @@
-<p><(post :body)></p>
+<p><(raw (post :body))></p>
 <ul>
   <(for [tag (post :tags)] ">
     <li><(str tag)></li>
