@@ -8,8 +8,8 @@
 (defn- consume)
 
 (defvar- consumers {
-  :text  #(raw (str " (raw \"" % "\") "))
-  :clj   #(raw (str " " % " "))
+  :text  #(raw (str "(raw \"" % "\")"))
+  :clj   #(raw (str % "\n"))
   :embed #(raw (apply str ["(screen f (" (raw (apply str (map consume %))) "))"]))
   :tpl   #(raw (apply str ["(screen f [" (raw (apply str (map consume %))) "])"]))
   })

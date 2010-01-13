@@ -67,3 +67,10 @@
   (is (=
     (posts-tpl esc-test-posts)
     (slurp "src/test/fleet/second/esc_posts_tpl.html"))))
+
+(deftest comments-test
+  (deftemplate tpl
+    [] "<p><(; post :body)><(str \"asd\")></p>")
+  (is (=
+    (tpl)
+    "<p>asd</p>")))
