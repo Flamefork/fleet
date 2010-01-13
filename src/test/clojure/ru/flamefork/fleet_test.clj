@@ -24,7 +24,7 @@
   (let [tpl  (slurp "src/test/fleet/first/test_tpl.fleet")
         html (slurp "src/test/fleet/first/test_tpl.html")]
     (is (=
-      ((fleet '(post title) tpl) test-post "Post Template")
+      ((fleet [post title] tpl) test-post "Post Template")
       html))))
 
 (deftest deftemplate-test
