@@ -4,7 +4,9 @@ Fleet is a FLExiblE Templates for Clojure.
 
 ## Gist
 
-Template is function of its arguments that returns string. Nothing more.
+0. Template is function of its arguments.
+0. HTML is better for HTML than some host language DSL (just cause HTML *is* DSL).
+0. Clojure is good :)
 
 ## Why Fleet?
 
@@ -47,9 +49,8 @@ Not writing HTML at all? Changing `escape-fn` to e.g. `str` will disable escapin
 0. Recursive load/register templates in specified (class)path
 0. Language contexts: different escaping functions, inflected from filename/ext (e.g. post.html.fleet and post.json.fleet)
 0. Cleanup
-0. Reimplement from scratch ;)
 
-`DONE` = First rough version :)
+`DONE` = First rough version.
 
 ## API
 
@@ -107,7 +108,7 @@ Template file (`post_dedicated.fleet`):
     
     <p><(str notice)></p>
     
-    <(comment Begin of post)>
+    <(; Begin of post)>
     <(inside-frame (let [p post] ">
       Author: <(p :author)><br/>
       Date: <(p :date)><br/>
@@ -119,7 +120,7 @@ Template file (`post_dedicated.fleet`):
         <li><(tag)></li>
       <")>
     </ul>
-    <(comment End of post)>
+    <(; End of post)>
 
     <(footer)>
     </body>
