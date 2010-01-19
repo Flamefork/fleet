@@ -27,3 +27,7 @@
 (defmethod screen Sequential
   [f s]
   (raw (apply str (map (partial screen f) s))))
+
+(defmethod screen nil
+  [f s]
+  (raw ""))

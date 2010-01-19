@@ -10,7 +10,9 @@
 
 (deftest build-test
   (let [ast (read-string (slurp "src/test/fleet/second/post_tpl.ast.clj"))
-        clj (slurp "src/test/fleet/second/post_tpl.clj")]
+        clj (slurp "src/test/fleet/second/post_tpl.clj")
+        src (build '(post) ast str)
+        replaced-src (clojure.walk/prewalk-replace {str 'str} src)]
     (is (=
-      (build '(post) ast)
+      replaced-src
       (read-string clj)))))

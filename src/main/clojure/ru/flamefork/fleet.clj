@@ -9,11 +9,12 @@
 ; Private
 ;;
 
+(defvar- escape-fn)
 (defvar- search-paths)
 
 (defn fleet-
   [args template-str]
-  (eval (build args (parse template-str))))
+  (eval (build args (parse template-str) @escape-fn)))
 
 (defn read-template-
   [fn-name]
