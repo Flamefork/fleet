@@ -7,9 +7,13 @@
 
 (defn- consume)
 
+(defn- escape-string
+  [s]
+  (.replace (.replace s "\\" "\\\\") "\"" "\\\""))
+
 (defvar- consumers {
-  :text  #(raw (str "(raw \"" % "\")"))
-  :clj   #(raw (str % "\n"))
+  :text  #(str "(raw \"" (escape-string %) "\")")
+  :clj   #(str % "\n")
   :embed #(raw (apply str ["(screen escape-fn (" (raw (apply str (map consume %))) "))"]))
   :tpl   #(raw (apply str ["(screen escape-fn [" (raw (apply str (map consume %))) "])"]))
   })
