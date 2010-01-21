@@ -8,23 +8,24 @@
 (defn- consume)
 
 (defvar- consumers {
-  :text  (fn [content escape-fn] `((raw ~content)))
-  :clj   (fn [content escape-fn] (read-string (str "(" content "\n)")))
-  :embed (fn [content escape-fn] `((screen ~escape-fn (~@(apply concat (map #(consume % escape-fn) content))))))
-  :tpl   (fn [content escape-fn] `((screen ~escape-fn [~@(apply concat (map #(consume % escape-fn) content))])))
+  :text  #(raw (str "(raw \"" % "\")"))
+  :clj   #(raw (str % "\n"))
+  :embed #(raw (apply str ["(screen escape-fn (" (raw (apply str (map consume %))) "))"]))
+  :tpl   #(raw (apply str ["(screen escape-fn [" (raw (apply str (map consume %))) "])"]))
   })
 
 (defn- consume
-  [ast escape-fn]
+  [ast]
   (let [[type content] ast
         consumer (type consumers)]
-    (consumer content escape-fn)))
+    (consumer content)))
 
 (defn build
   "Build Clojure forms from template-str."
-  [args ast escape-fn]
-  `(do
+  [args ast]
+  (read-string (str "
+  (do
     (use 'ru.flamefork.fleet.runtime)
-    (fn
-      [~@args]
-      ~@(consume ast escape-fn))))
+    (let [escape-fn @ru.flamefork.fleet/escape-fn]
+    (fn [" (s/join " " args) "]"
+    (consume ast) ")))")))

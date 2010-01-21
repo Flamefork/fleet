@@ -14,7 +14,7 @@
 
 (defn fleet-
   [args template-str]
-  (eval (build args (parse template-str) @escape-fn)))
+  (eval (build args (parse template-str))))
 
 (defn read-template-
   [fn-name]
