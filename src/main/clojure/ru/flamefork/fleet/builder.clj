@@ -3,7 +3,7 @@
     [clojure.contrib.def]
     [ru.flamefork.fleet.runtime])
   (:require
-    [clojure.contrib.str-utils2 :as s]))
+    [clojure.contrib.str-utils2 :as su]))
 
 (defn- consume)
 
@@ -24,12 +24,16 @@
         consumer (type consumers)]
     (consumer content)))
 
+(defn wrap-template
+  [args s]
+  (read-string (str "
+  (do
+    (use 'ru.flamefork.fleet)
+    (use 'ru.flamefork.fleet.runtime)
+    (let [escape-fn @ru.flamefork.fleet/escape-fn]
+    (fn [" (su/join " " args) "]" s ")))")))
+
 (defn build
   "Build Clojure forms from template-str."
   [args ast]
-  (read-string (str "
-  (do
-    (use 'ru.flamefork.fleet.runtime)
-    (let [escape-fn @ru.flamefork.fleet/escape-fn]
-    (fn [" (s/join " " args) "]"
-    (consume ast) ")))")))
+  (wrap-template args (consume ast)))

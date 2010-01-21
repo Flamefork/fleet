@@ -14,7 +14,9 @@
 
 (defn fleet-
   [args template-str]
-  (eval (build args (parse template-str))))
+  (condp instance? template-str
+    clojure.lang.IPersistentList (eval (wrap-template args (.toString template-str)))
+    java.lang.CharSequence (eval (build args (parse template-str)))))
 
 (defn read-template-
   [fn-name]

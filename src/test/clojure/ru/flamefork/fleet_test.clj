@@ -74,3 +74,10 @@
   (is (=
     (tpl)
     "<p>asd</p>")))
+
+(deftest anonymous-tpls-test
+  (deftemplate anon-posts-tpl [posts])
+  (is (=
+    (anon-posts-tpl test-posts)
+    (slurp "src/test/fleet/third/anon_posts_tpl.html"))))
+

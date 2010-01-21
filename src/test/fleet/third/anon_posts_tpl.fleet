@@ -1,0 +1,12 @@
+<ul class="posts">
+<(map (fleet [post] '">
+  <li class="post">
+    <p><(post :body)></p>
+    <ul class="tags">
+      <(map (fleet [tag] '">
+        <li><(str tag)></li>
+      <") (post :tags))>
+    </ul>
+  </li>
+<") posts)>
+</ul>

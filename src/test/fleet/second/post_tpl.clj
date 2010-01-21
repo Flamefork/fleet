@@ -1,4 +1,5 @@
 (do
+  (use 'ru.flamefork.fleet)
   (use 'ru.flamefork.fleet.runtime)
   (let [escape-fn @ru.flamefork.fleet/escape-fn]
     (fn [post]
