@@ -84,9 +84,6 @@
         <repository>
             <id>Clojure Maven Repository</id>
             <url>http://build.clojure.org/releases/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
             <releases>
                 <enabled>true</enabled>
             </releases>
