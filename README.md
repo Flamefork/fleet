@@ -6,7 +6,9 @@ Fleet is a FLExiblE Templates for Clojure.
 
 0. Template is function of its arguments.
 0. HTML is better for HTML than some host language DSL (just cause HTML *is* DSL).
+0. DOM manipulating and XSLT are not good for templating (yes, opinionated).
 0. Clojure is good :)
+0. HTML isn't the only language that needs templating.
 
 ## Why Fleet?
 
@@ -35,8 +37,10 @@ are here too:
 ...just plain Clojure code.
 
 Need to bypass escaping?  
-`<(raw "<script>alert('Hello!')</script>")>`  
-Not writing HTML at all? Changing `escape-fn` to e.g. `str` will disable escaping.
+`<(raw "<script>alert('Hello!')</script>")>`
+
+Not writing HTML at all? Changing `escape-fn` to e.g. `str` or `(fn [o] o)` will disable escaping.  
+Changing to some `escape-js` will, obviously, work for JSON or JS.
 
 ## Roadmap
 
@@ -46,6 +50,7 @@ Not writing HTML at all? Changing `escape-fn` to e.g. `str` will disable escapin
 0. `DONE` Builder
 0. `DONE` Infrastructure
 0. `DONE` Auto HTML-escaping
+0. `DONE` Anonymous templates
 0. Recursive load/register templates in specified (class)path
 0. Language contexts: different escaping functions, inflected from filename/ext (e.g. post.html.fleet and post.json.fleet)
 0. Cleanup
@@ -54,7 +59,7 @@ Not writing HTML at all? Changing `escape-fn` to e.g. `str` will disable escapin
 
 ## API
 
-`(fleet '(list of args) template-str)`  
+`(fleet [& args] template-str)`  
 Creates anonymous function from template-str.
 
 `(deftemplate fn-name [& args] source?)`  
@@ -81,19 +86,30 @@ Use `str` function to place value `<(str posts-count)>`.
 
 This seems to be complete system, but writing something like
     <(raw (for [p posts]
-      (fleet "<li class=\"post\"><(p :title)></li>")))>
+      (str "<li class=\"post\">" (p :title) "</li>")))>
 is too ugly.. And defining `<li class="post"><(p :title)></li>` as separate template
-can be overkill in many cases. So there should be the way of defining anonymous templates and applying them inplace.
+can be overkill in many cases. So there should be the way of embedding strings and anonymous templates.
 
-Slipway construction `"><"` intended for defining anonymous template and applying it.
+Slipway construction `"><"` intended for embedding strings.
 The previous example could be rewritten using Slipway as
     <(for [p posts] ">
       <li class="post"><(p :title)></li>
     <")>
 
 This example has two points worth mentioning.
-Result of `"><"` is String, not anonymous template.
-Also Spaceship with Slipway attached concidered `raw` by default.
+Result of `"><"` is expression with String result type.
+Strings in Slipway concidered `raw` by default.
+
+Next case is something like this:
+    <(raw (map (fn [post]
+      (str "<li class=\"post\">" (post :title) "</li>")) posts))>
+
+With Slipway it can be replaced with
+    <(map (fn [post] ">
+      <li class="post"><(post :title)></li>
+    <") posts)>
+
+Need to mention that this construction supports lexical scoping.
 
 ## Examples
 
@@ -117,7 +133,7 @@ Template file (`post_dedicated.fleet`):
     <p><(post :body)></p>
     <ul>
       <(for [tag (post :tags] ">
-        <li><(tag)></li>
+        <li><(str tag)></li>
       <")>
     </ul>
     <(; End of post)>
