@@ -1,12 +1,12 @@
 <ul class="posts">
-<(map (fleet [post] '">
+<(let [tagTail " tag"] (map (fn [post] ">
   <li class="post">
     <p><(post :body)></p>
     <ul class="tags">
-      <(map (fleet [tag] '">
-        <li><(str tag)></li>
+      <(map (fn [tag] ">
+        <li><(str tag tagTail)></li>
       <") (post :tags))>
     </ul>
   </li>
-<") posts)>
+<") posts))>
 </ul>

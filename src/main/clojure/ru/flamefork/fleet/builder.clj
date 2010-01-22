@@ -24,16 +24,13 @@
         consumer (type consumers)]
     (consumer content)))
 
-(defn wrap-template
-  [args s]
+(defn build
+  "Build Clojure forms from template-str."
+  [args ast]
   (read-string (str "
   (do
     (use 'ru.flamefork.fleet)
     (use 'ru.flamefork.fleet.runtime)
     (let [escape-fn @ru.flamefork.fleet/escape-fn]
-    (fn [" (su/join " " args) "]" s ")))")))
-
-(defn build
-  "Build Clojure forms from template-str."
-  [args ast]
-  (wrap-template args (consume ast)))
+    (fn [" (su/join " " args) "]"
+    (consume ast) ")))")))
