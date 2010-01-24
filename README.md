@@ -17,7 +17,7 @@ Because
 — close to Clojure  
 — and I hate writing HTML not in HTML (clj-html, haml, etc).
 
-I reviewed few Clojure and CL implementations of ERB/JSP-like templates. Their syntax looks like  
+So I've started by reviewing few Clojure and CL implementations of ERB/JSP-like templates. Their syntax looks like  
 `<p><%= (post :body) %></p>`  
 or  
 `<p><?clj (post :body) ?></p>`  
@@ -51,27 +51,27 @@ Changing to some `escape-js` will, obviously, work for JSON or JS.
 0. `DONE` Infrastructure
 0. `DONE` Auto HTML-escaping
 0. `DONE` Anonymous templates
-0. Recursive load/register templates in specified (class)path
-0. Language contexts: different escaping functions, inflected from filename/ext (e.g. post.html.fleet and post.json.fleet)
+0. `IN PROGRESS` Recursive load/register templates in specified path
+0. `IN PROGRESS` Language contexts: different escaping functions, inflected from filename/ext (e.g. post.html.fleet and post.json.fleet)
+0. (?) Get rid of antlr dependency (reimplement parser)
+0. Support escaping of Fleet tokens (like \<( to bypass parsing it)
 0. Cleanup
 
 `DONE` = First rough version.
 
 ## API
 
-`(fleet [& args] template-str)`  
-Creates anonymous function from template-str.
+`(fleet [& args] template-str escape-fn)`  
+Creates anonymous function from template-str applying escaping by escape-fn.
 
-`(deftemplate fn-name [& args] source?)`  
-Creates function with name fn-name and defined args.  
-If source is defined, it's parsed as String containing template.  
-If source is not defined, file `fn_name.fleet` found in one of `@search-paths` is loaded and parsed.
+`(fleet-ns root-path filters)`  
+Treats root-path as root of template namespaceand creates template function for each file in it with name according to relative path.
+Template function in this case takes one or two arguments: first named same as function name and second named "data".
+When it's called with one arguments both symbols (fn-name and data) are bound to same value (argument value).
 
-`search-paths`  
-List of paths used for template search (Atom).
-
-`escape-fn`  
-Function for escaping XML tags & entities (Atom).
+Filters argument is map of file-mask -> fn pairs used to filter which files to process and with which escaping function.
+Masks could be defined as :keyword or as #"regex".  
+:default mask is treated as "others". If it is set all files (escept for .hidden ones) will be processed. 
 
 ## Template Language
 
@@ -97,7 +97,7 @@ The previous example could be rewritten using Slipway as
     <")>
 
 This example has two points worth mentioning.
-Result of `"><"` is expression with String result type.
+Result of `"><"` construction processing is expression with String type.
 Strings in Slipway concidered `raw` by default.
 
 Next case is something like this:
@@ -109,9 +109,11 @@ With Slipway it can be replaced with
       <li class="post"><(post :title)></li>
     <") posts)>
 
-Need to mention that this construction supports lexical scoping.
+Need to mention that all this supports lexical scoping and other Clojure fectures just like reference (previous) expression.
 
 ## Examples
+
+### Language
 
 Template file (`post_dedicated.fleet`):
     <head>
@@ -141,11 +143,33 @@ Template file (`post_dedicated.fleet`):
     <(footer)>
     </body>
     </html>
-Clojure:
-    (def footer (fleet "<p>&copy; <(.get (Calendar/getInstance) Calendar/YEAR)> Flamefork</p>"))
 
+Clojure:
     (deftemplate post-page [post] "post_dedicated")
     
     (footer)
 
     (post-page p)
+
+### API
+
+Low-level:
+    (def footer (fleet "<p>&copy; <(.get (Calendar/getInstance) Calendar/YEAR)> Flamefork</p>"))
+
+High-level:
+
+Directory tree
+    root_dir/
+      first_subdir/
+        file_a.html.fleet
+        file_b.html.fleet
+      second_subdir/
+        file_c.html.fleet
+will be treated and processed by `(fleet-ns "path/to/root_dir" {...})` as functions
+    first-subdir.file-a
+    first-subdir.file-b
+    second-subdir.file-c
+and (for example) first function will be
+    (defn first-subdir.file-a
+      ([file-a data] ...)
+      ([file-a] (recur file-a file-a)))
