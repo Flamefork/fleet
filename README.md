@@ -39,8 +39,8 @@ are here too:
 Need to bypass escaping?  
 `<(raw "<script>alert('Hello!')</script>")>`
 
-Not writing HTML at all? Changing `escape-fn` to e.g. `str` or `(fn [o] o)` will disable escaping.  
-Changing to some `escape-js` will, obviously, work for JSON or JS.
+Not writing HTML at all? Using `escape-fn` like `str` or `(fn [o] o)` will disable escaping.  
+Use some `escape-mylang` to work with other languages.
 
 ## Roadmap
 

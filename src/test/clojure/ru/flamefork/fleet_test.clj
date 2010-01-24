@@ -3,15 +3,15 @@
     [clojure.test]
     [ru.flamefork.fleet]))
 
-(defn setup-load-paths
-  [f]
-  (add-search-path "src/test/fleet/first")
-  (add-search-path "src/test/fleet/second")
-  (add-search-path "src/test/fleet/third")
-  (f)
-  (reset! search-paths []))
+(defmacro fileet
+  "Convinient way to define test templates"
+  [args filename]
+  `(fleet ~args (slurp (str "src/test/fleet/" ~filename ".fleet")) clojure.contrib.lazy-xml/escape-xml))
 
-(use-fixtures :each setup-load-paths)
+(defmacro readhtml
+  "Convinient way to read test data"
+  [filename]
+  `(slurp (str "src/test/fleet/" ~filename ".html")))
 
 (def test-posts
   [{:body "First Post"  :tags ["tag1" "tag2" "tag3"]},
@@ -21,63 +21,41 @@
   (first test-posts))
 
 (deftest fleet-test
-  (let [tpl  (slurp "src/test/fleet/first/test_tpl.fleet")
-        html (slurp "src/test/fleet/first/test_tpl.html")]
-    (is (=
-      ((fleet [post title] tpl) test-post "Post Template")
-      html))))
+  (is (=
+    ((fileet [post title] "first/test_tpl") test-post "Post Template")
+    (readhtml "first/test_tpl"))))
 
 (deftest deftemplate-test
-  (deftemplate single-post
-    [post] "<p><(post :body)></p>")
+  (def single-post (fleet [post] "<p><(post :body)></p>" clojure.contrib.lazy-xml/escape-xml))
   (is (=
     (single-post test-post)
     "<p>First Post</p>")))
 
-(deftest template-loading-test
-  (deftemplate test-tpl [post title])
-  (is (=
-    (test-tpl test-post "Post Template")
-    (slurp "src/test/fleet/first/test_tpl.html"))))
-
-(deftest load-paths-test
-  (reset! search-paths [])
-  (add-search-path "src/test/fleet/first")
-  (add-search-path "src/test/fleet/second")
-  (add-search-path "src/test/fleet/third")
-  (is (= @search-paths [
-    "src/test/fleet/first"
-    "src/test/fleet/second"
-    "src/test/fleet/third"])))
-
 (deftest sub-template-test
-  (deftemplate post-tpl [post])
-  (deftemplate posts-tpl [posts])
+  (def post-tpl (fileet [post] "second/post_tpl"))
+  (def posts-tpl (fileet [posts] "second/posts_tpl"))
   (is (=
     (posts-tpl test-posts)
-    (slurp "src/test/fleet/second/posts_tpl.html"))))
+    (readhtml "second/posts_tpl"))))
 
 (def esc-test-posts
   [{:body "Body with \" Quote" :tags ["<evil>tag1</evil>" "tag \"2\"" "tag3"]},
    {:body "qwe<br>asd<br>zxc"  :tags ["tag1" "tag2"]}])
 
 (deftest escaping-test
-  (deftemplate post-tpl [post])
-  (deftemplate posts-tpl [posts])
+  (def post-tpl (fileet [post] "second/post_tpl"))
+  (def posts-tpl (fileet [posts] "second/posts_tpl"))
   (is (=
     (posts-tpl esc-test-posts)
-    (slurp "src/test/fleet/second/esc_posts_tpl.html"))))
+    (readhtml "second/esc_posts_tpl"))))
 
 (deftest comments-test
-  (deftemplate tpl
-    [] "<p><(; post :body)><(str \"asd\")></p>")
-  (is (=
-    (tpl)
-    "<p>asd</p>")))
+  (def tpl (fleet [] "<p><(; post :body)><(str \"asd\")></p>" clojure.contrib.lazy-xml/escape-xml))
+  (is (= (tpl) "<p>asd</p>")))
 
 (deftest anonymous-tpls-test
-  (deftemplate anon-posts-tpl [posts])
+  (def anon-posts-tpl (fileet [posts] "third/anon_posts_tpl"))
   (is (=
     (anon-posts-tpl test-posts)
-    (slurp "src/test/fleet/third/anon_posts_tpl.html"))))
+    (readhtml "third/anon_posts_tpl"))))
 

@@ -31,6 +31,5 @@
   (do
     (use 'ru.flamefork.fleet)
     (use 'ru.flamefork.fleet.runtime)
-    (let [escape-fn @ru.flamefork.fleet/escape-fn]
-    (fn [" (su/join " " args) "]"
-    (consume ast) ")))")))
+    (fn [escape-fn " (su/join " " args) "]"
+    (consume ast) "))")))

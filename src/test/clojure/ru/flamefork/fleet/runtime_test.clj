@@ -1,9 +1,10 @@
 (ns ru.flamefork.fleet.runtime-test
+  (:require clojure.contrib.lazy-xml)
   (:use
     [clojure.test]
     [ru.flamefork.fleet.runtime]))
 
-(def f @ru.flamefork.fleet/escape-fn)
+(def escape-fn clojure.contrib.lazy-xml/escape-xml)
 
 (deftest raw-test
   (let [s "qwe<br>asd"]
@@ -13,17 +14,17 @@
 (deftest screen-obj-test
   (let [s "qwe<br>asd"]
     (is (=
-      (screen f s)
+      (screen escape-fn s)
       "qwe&lt;br&gt;asd"))
     (is (=
-      (screen f (raw s))
+      (screen escape-fn (raw s))
       "qwe<br>asd"))
-    (is (raw? (screen f s)))
-    (is (raw? (screen f (raw s))))))
+    (is (raw? (screen escape-fn s)))
+    (is (raw? (screen escape-fn (raw s))))))
 
 (deftest screen-seq-test
   (let [s ["qwe<br>asd" " " (raw "qwe<br>asd")]]
     (is (=
-      (screen f s)
+      (screen escape-fn s)
       "qwe&lt;br&gt;asd qwe<br>asd"))
-    (is (raw? (screen f s)))))
+    (is (raw? (screen escape-fn s)))))

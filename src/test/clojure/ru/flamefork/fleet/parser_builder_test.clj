@@ -1,7 +1,6 @@
 (ns ru.flamefork.fleet.parser-builder-test
   (:use
     [clojure.test]
-    [clojure.contrib pprint]
     [ru.flamefork.fleet parser builder]))
 
 (deftest parse-test
