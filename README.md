@@ -53,7 +53,8 @@ Use some `escape-mylang` to work with other languages.
 0. `DONE` Anonymous templates
 0. `DONE` Recursive load/register templates in specified path
 0. `IN PROGRESS` Language contexts: different escaping functions, inflected from filename/ext (e.g. post.html.fleet and post.json.fleet)
-0. (?) Get rid of antlr dependency (reimplement parser)
+0. Error reporting
+0. Get rid of antlr dependency (reimplement parser)
 0. Support escaping of Fleet tokens (like \<( to bypass parsing it)
 0. Cleanup
 
