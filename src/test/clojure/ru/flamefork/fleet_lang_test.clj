@@ -1,4 +1,5 @@
-(ns ru.flamefork.fleet-test
+(ns ru.flamefork.fleet-lang-test
+  (:require clojure.contrib.lazy-xml)
   (:use
     [clojure.test]
     [ru.flamefork.fleet]))

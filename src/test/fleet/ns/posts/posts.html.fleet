@@ -1,0 +1,4 @@
+<h1><(data :title)></h1>
+<div>
+<(map post posts)>
+</div>

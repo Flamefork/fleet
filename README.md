@@ -39,7 +39,7 @@ are here too:
 Need to bypass escaping?  
 `<(raw "<script>alert('Hello!')</script>")>`
 
-Not writing HTML at all? Using `escape-fn` like `str` or `(fn [o] o)` will disable escaping.  
+Not writing HTML at all? Use fleet with default (bypassing) escape function.  
 Use some `escape-mylang` to work with other languages.
 
 ## Roadmap
@@ -51,7 +51,7 @@ Use some `escape-mylang` to work with other languages.
 0. `DONE` Infrastructure
 0. `DONE` Auto HTML-escaping
 0. `DONE` Anonymous templates
-0. `IN PROGRESS` Recursive load/register templates in specified path
+0. `DONE` Recursive load/register templates in specified path
 0. `IN PROGRESS` Language contexts: different escaping functions, inflected from filename/ext (e.g. post.html.fleet and post.json.fleet)
 0. (?) Get rid of antlr dependency (reimplement parser)
 0. Support escaping of Fleet tokens (like \<( to bypass parsing it)
@@ -61,8 +61,8 @@ Use some `escape-mylang` to work with other languages.
 
 ## API
 
-`(fleet [& args] template-str escape-fn)`  
-Creates anonymous function from template-str applying escaping by escape-fn.
+`(fleet [& args] template-str escape-fn?)`  
+Creates anonymous function from template-str applying escaping by escape-fn (default is bypass).
 
 `(fleet-ns root-path filters)`  
 Treats root-path as root of template namespaceand creates template function for each file in it with name according to relative path.
