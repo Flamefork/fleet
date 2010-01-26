@@ -27,6 +27,7 @@
   :tpl {
     FleetParser/SPACESHIP_OPEN [:embed (partial children :embed)]
     FleetParser/CHAR           [:text text-consumer]
+    0                          [:tpl (partial children :tpl)]
     }
   })  
 
@@ -42,5 +43,5 @@
   (let [lexer (FleetLexer. (ANTLRStringStream. template-str))
         parser (FleetParser. (CommonTokenStream. lexer))
         tree (.. parser input getTree)]
-    [:tpl (children :tpl tree)]))
+    (consume :tpl tree)))
 

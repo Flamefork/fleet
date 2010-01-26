@@ -60,3 +60,8 @@
     (anon-posts-tpl test-posts)
     (readhtml "third/anon_posts_tpl"))))
 
+(deftest embed-only-test
+  (def post-body (fleet [post] "<(post :body)>"))
+  (is (=
+    (post-body test-post)
+    "First Post")))
