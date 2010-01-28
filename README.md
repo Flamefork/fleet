@@ -78,8 +78,12 @@ Template function creation conventions:
 — When it's called with one arguments both symbols (fn-name and data) are bound to same value of this argument.
 
 Filters argument is vector of file-filter -> escape-fn pairs used to filter which files to process and with which escaping function.
-Masks could be defined as function, keyword or regex.  
-`:default` mask is treated as "others". If it is set all files (escept for .hidden ones) will be processed. 
+File filters could be defined as function, string, regex, :fleet or :all.  
+— Function should have one File argument and Boolean type.  
+— String filter definition treated as `*.string.fleet` mask, e.g. `"js"` mask will match `update.js.fleet`.  
+— Regex filter matches whole filename, e.g. `#".*.html"` will match `posts.html`.  
+— `:fleet` filter is treated as "others". If it is set all `*.fleet` files will be processed.  
+— `:all` means, literally, all.
 
 ## Template Language
 
@@ -173,7 +177,7 @@ Directory tree
         file_b.html.fleet
       second_subdir/
         file_c.html.fleet
-will be treated and processed by `(fleet-ns "path/to/root_dir" [:default :xml])` as functions
+will be treated and processed by `(fleet-ns "path/to/root_dir" [:fleet :xml])` as functions
     first-subdir.file-a
     first-subdir.file-b
     second-subdir.file-c

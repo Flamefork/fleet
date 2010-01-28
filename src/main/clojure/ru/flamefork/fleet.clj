@@ -32,12 +32,18 @@
 
 ;;;;;;;;;; template namespace ;;;;;;;;;;
 
+(defn- filemask-fn
+  [type]
+  (let [ext (str (if type (str "." type) "") ".fleet")]
+    #(.. % getName (endsWith ext))))
+
 (defvar- filter-fn
   (memoize (fn [filter]
     (condp = filter
       :all (constantly true)
-      :default #(.. % getName (endsWith ".fleet"))
+      :fleet (filemask-fn nil)
       (condp instance? filter
+        String (filemask-fn filter)
         clojure.lang.IFn filter
         Pattern #(re-matches filter (.getName %)))))))
 
@@ -63,7 +69,7 @@
 (defn fleet-ns
   "Treats root-path as root of template namespaceand creates template
   function for each file in it with name corresponding to relative path."
-  ([root-path] (fleet-ns root-path [:default :bypass]))
+  ([root-path] (fleet-ns root-path [:fleet :bypass]))
   ([root-path filters]
     (when-not (even? (count filters))
       (throw (IllegalArgumentException. "fleet-ns requires an even number of forms in filters vector")))
