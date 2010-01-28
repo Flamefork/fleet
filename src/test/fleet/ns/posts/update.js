@@ -1,0 +1,1 @@
+$('#post').html("<p>First post.</p>\n");
