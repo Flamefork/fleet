@@ -1,12 +1,12 @@
-# Fleet
+### Fleet
 
-Fleet is a FLExiblE Templates for Clojure.
+Templating System for Clojure
 
 ## Gist
 
 0. Template is function of its arguments.
 0. HTML is better for HTML than some host language DSL (just cause HTML *is* DSL).
-0. DOM manipulating and XSLT are not good for templating (yes, opinionated).
+0. DOM manipulation tools and XSLT are good for transforming, not for templating (yes, opinionated).
 0. Clojure is good :)
 0. HTML isn't the only language that needs templating.
 
@@ -63,16 +63,23 @@ Use some `escape-mylang` to work with other languages.
 ## API
 
 `(fleet [& args] template-str escape-fn?)`  
-Creates anonymous function from template-str applying escaping by escape-fn (default is bypass).
+Creates anonymous function from template-str applying escaping by escape-fn.
+Escape-fn could be function of one String argument or keyword specifying one of predefined functions:  
+`:bypass` — default, no escaping;  
+`:xml` — XML (or HTML) rules;  
+`:str` — Java-compatible string escaping.
 
 `(fleet-ns root-path filters)`  
-Treats root-path as root of template namespaceand creates template function for each file in it with name according to relative path.
-Template function in this case takes one or two arguments: first named same as function name and second named "data".
-When it's called with one arguments both symbols (fn-name and data) are bound to same value (argument value).
+Treats root-path as root of template namespaceand creates template functions for each file in it with name according to relative path.
 
-Filters argument is map of file-mask -> fn pairs used to filter which files to process and with which escaping function.
-Masks could be defined as :keyword or as #"regex".  
-:default mask is treated as "others". If it is set all files (escept for .hidden ones) will be processed. 
+Template function creation conventions:   
+— Several functions will be created for each file. E.g. file `posts.html.fleet` will produce 3 functions: `posts`, `posts-html` and `posts-html-fleet`.  
+— Template function will take one or two arguments: first named same as shortest function name for file (`posts` in previous example) and second named `data`.  
+— When it's called with one arguments both symbols (fn-name and data) are bound to same value of this argument.
+
+Filters argument is vector of file-filter -> escape-fn pairs used to filter which files to process and with which escaping function.
+Masks could be defined as function, keyword or regex.  
+`:default` mask is treated as "others". If it is set all files (escept for .hidden ones) will be processed. 
 
 ## Template Language
 
@@ -166,7 +173,7 @@ Directory tree
         file_b.html.fleet
       second_subdir/
         file_c.html.fleet
-will be treated and processed by `(fleet-ns "path/to/root_dir" {...})` as functions
+will be treated and processed by `(fleet-ns "path/to/root_dir" [:default :xml])` as functions
     first-subdir.file-a
     first-subdir.file-b
     second-subdir.file-c

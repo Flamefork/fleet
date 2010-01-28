@@ -1,23 +1,36 @@
 (ns ru.flamefork.fleet
-  (:import java.io.File)
+  (:import
+    [java.io File]
+    [java.util.regex Pattern])
   (:require
-    [clojure.contrib.str-utils2 :as su])
+    [clojure.contrib.str-utils2 :as su]
+    [clojure.contrib.lazy-xml :as lx])
   (:use
-    [clojure.contrib.pprint]
-    [ru.flamefork.fleet parser builder loader]))
+    [clojure.contrib.def]
+    [ru.flamefork.fleet parser builder loader util]))
 
-(defn- default-escape-fn [s] s)
+;;;;;;;;;; single template ;;;;;;;;;;
+
+(defvar- escape-fn
+  (memoize (fn [escape]
+    (condp = escape
+      :bypass (fn [s] s)
+      :str escape-string
+      :xml lx/escape-xml
+      escape))))
 
 (defn fleet-
   ([args template-str]
-    (fleet- args template-str default-escape-fn))
-  ([args template-str escape-fn]
-    (partial (eval (build args (parse template-str))) escape-fn)))
+    (fleet- args template-str :bypass))
+  ([args template-str escape]
+    (partial (eval (build args (parse template-str))) (escape-fn escape))))
 
 (defmacro fleet
   "Creates anonymous function from template containing in template-str."
   [args & more]
   `(fleet- '~args ~@more))
+
+;;;;;;;;;; template namespace ;;;;;;;;;;
 
 (defn- default-file-filter
   [f]
@@ -39,7 +52,7 @@
     ; Bind vars to templates
     (doseq [{:keys [ns names source]} tpl-infos]
       (let [arg-names [(last names) 'data]
-            tpl (fleet- arg-names source default-escape-fn)
+            tpl (fleet- arg-names source :bypass)
             wrapper (fn ([a] (tpl a a)) ([a data] (tpl a data)))]
         (doseq [n names]
           (eval `(do (ns ~ns) (def ~n ~wrapper))))))))
