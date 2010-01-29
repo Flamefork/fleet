@@ -1,7 +1,8 @@
 (ns ru.flamefork.fleet
   (:import
     [java.io File]
-    [java.util.regex Pattern])
+    [java.util.regex Pattern]
+    [clojure.lang IFn])
   (:require
     [clojure.contrib.str-utils2 :as su]
     [clojure.contrib.lazy-xml :as lx])
@@ -16,6 +17,7 @@
     (condp = escape
       :bypass bypass
       :str escape-string
+      :clj-str escape-clj-string
       :xml lx/escape-xml
       escape))))
 
@@ -23,7 +25,9 @@
   ([args template-str]
     (fleet- args template-str :bypass))
   ([args template-str escape]
-    (partial (load-fleet-string (build args (parse template-str))) (escape-fn escape))))
+    (fleet- args template-str escape [nil "FLEET_TEMPLATE"]))
+  ([args template-str escape src]
+    (partial (load-fleet-string (build args (parse template-str)) src) (escape-fn escape))))
 
 (defmacro fleet
   "Creates anonymous function from template containing in template-str."
@@ -44,7 +48,7 @@
       :fleet (filemask-fn nil)
       (condp instance? filter
         String (filemask-fn filter)
-        clojure.lang.IFn filter
+        IFn filter
         Pattern #(re-matches filter (.getName %)))))))
 
 (defn- def-path-vars
@@ -58,9 +62,9 @@
 (defn- assign-path-templates
   [root-path filter escape]
   (let [tpl-infos (make-tpl-infos root-path (filter-fn filter))]
-    (doseq [{:keys [ns names source]} tpl-infos]
+    (doseq [{:keys [ns names content src]} tpl-infos]
       (let [arg-names [(last names) 'data]
-            tpl (fleet- arg-names source escape)
+            tpl (fleet- arg-names content escape src)
             wrapper (fn ([a] (tpl a a)) ([a data] (tpl a data)))]
         (doseq [n names]
           (when-not (.hasRoot (ns-resolve ns n))

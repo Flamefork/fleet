@@ -31,7 +31,8 @@
 (defn- make-tpl-info
   [root file]
   (let [ns (ns-from-path (relative-path root (.getParentFile file)))]
-    {:source (slurp (.getPath file))
+    {:src [(.getParent file) (.getName file)]
+     :content (slurp (.getPath file))
      :names (names-from-filename (.getName file))
      :ns ns}))
 
@@ -43,8 +44,8 @@
     (map (partial make-tpl-info root) files)))
 
 (defn load-fleet-string
-  [s]
+  [s src]
   (-> s
     (java.io.StringReader.)
     (clojure.lang.LineNumberingPushbackReader.)
-    (clojure.lang.Compiler/load nil "COMPILED_FLEET_TEMPLATE")))
+    (clojure.lang.Compiler/load (first src) (second src))))
