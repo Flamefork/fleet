@@ -7,7 +7,7 @@
 (defmacro fileet
   "Convinient way to define test templates"
   [args filename]
-  `(fleet ~args (slurp (str "src/test/fleet/" ~filename ".fleet")) :xml))
+  `(fleet ~args (slurp (str "src/test/fleet/" ~filename ".fleet")) {:escaping :xml}))
 
 (defmacro readhtml
   "Convinient way to read test data"
@@ -27,7 +27,7 @@
     (readhtml "first/test_tpl"))))
 
 (deftest deftemplate-test
-  (def single-post (fleet [post] "<p><(post :body)></p>" clojure.contrib.lazy-xml/escape-xml))
+  (def single-post (fleet [post] "<p><(post :body)></p>" {:escaping clojure.contrib.lazy-xml/escape-xml}))
   (is (=
     (single-post test-post)
     "<p>First Post</p>")))
@@ -51,7 +51,7 @@
     (readhtml "second/esc_posts_tpl"))))
 
 (deftest comments-test
-  (def tpl (fleet [] "<p><(; post :body \n)><(str \"asd\")></p>" :xml))
+  (def tpl (fleet [] "<p><(; post :body \n)><(str \"asd\")></p>" {:escaping :xml}))
   (is (= (tpl) "<p>asd</p>")))
 
 (deftest anonymous-tpls-test

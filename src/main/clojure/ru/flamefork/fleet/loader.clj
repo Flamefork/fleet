@@ -31,10 +31,12 @@
 (defn- make-tpl-info
   [root file]
   (let [ns (ns-from-path (relative-path root (.getParentFile file)))]
-    {:src [(.getParent file) (.getName file)]
-     :content (slurp (.getPath file))
+    {:content (slurp (.getPath file))
      :names (names-from-filename (.getName file))
-     :ns ns}))
+     :ns ns
+     :file-path (.getAbsolutePath file)
+     :file-name (.getName file)
+     }))
 
 (defn make-tpl-infos
   [root-path file-filter]
@@ -44,8 +46,8 @@
     (map (partial make-tpl-info root) files)))
 
 (defn load-fleet-string
-  [s src]
+  [s file-path file-name]
   (-> s
     (java.io.StringReader.)
     (clojure.lang.LineNumberingPushbackReader.)
-    (clojure.lang.Compiler/load (first src) (second src))))
+    (clojure.lang.Compiler/load file-path file-name)))

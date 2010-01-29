@@ -53,7 +53,7 @@ Use some `escape-mylang` to work with other languages.
 0. `DONE` Anonymous templates
 0. `DONE` Recursive load/register templates in specified path
 0. `DONE` Language contexts: different escaping functions for different file masks (e.g. post.html.fleet and post.json.fleet to use html and js escaping)
-0. `IN PROGRESS` Error reporting
+0. `DONE` Error reporting
 0. Get rid of antlr dependency (reimplement parser)
 0. Support escaping of Fleet tokens (like \<( to bypass parsing it)
 0. Cleanup
@@ -62,12 +62,16 @@ Use some `escape-mylang` to work with other languages.
 
 ## API
 
-`(fleet [& args] template-str escape-fn?)`  
-Creates anonymous function from template-str applying escaping by escape-fn.
-Escape-fn could be function of one String argument or keyword specifying one of predefined functions:  
+`(fleet [& args] template-str options)`  
+Creates anonymous function from template-str using provided options map.
+
+Main option is `:escaping`. It can be function of one String argument or keyword specifying one of predefined functions:  
 `:bypass` — default, no escaping;  
 `:xml` — XML (or HTML) rules;  
-`:str` — Java-compatible string escaping.
+`:str` — Java-compatible string escaping;  
+`:clj-str` — Clojure string escaping (`\n` is allowed).
+
+Options `:file-name` and `:file-path` of type String are used for error reporting (e.g. file-name will be in stacktrace along with line number).
 
 `(fleet-ns root-path filters)`  
 Treats root-path as root of template namespaceand creates template functions for each file in it with name according to relative path.

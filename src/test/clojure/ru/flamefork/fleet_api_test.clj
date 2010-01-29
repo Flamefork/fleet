@@ -14,6 +14,14 @@
     ((resolve 'posts/posts-html) test-posts test-data)
     (slurp "src/test/fleet/ns/posts/posts.html"))))
 
+(deftest error-reporting-test
+  (fleet-ns "src/test/fleet/ns")
+
+  (let [e (is (thrown? Exception ((resolve 'posts/exceptional) nil)))
+        ste (first (.getStackTrace e))]
+    (is (= (.getFileName ste) "exceptional.fleet"))
+    (is (= (.getLineNumber ste) 4))))
+
 (deftest cross-lang-test
   (fleet-ns "src/test/fleet/ns", ["js" :str, "html" :xml])
   (is (=

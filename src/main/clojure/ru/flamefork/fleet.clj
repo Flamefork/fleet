@@ -21,13 +21,22 @@
       :xml lx/escape-xml
       escape))))
 
+(defvar- default-opts {
+  :escaping  :bypass
+  :file-name "FLEET_TEMPLATE"
+  :file-path nil
+  })
+
 (defn fleet-
   ([args template-str]
-    (fleet- args template-str :bypass))
-  ([args template-str escape]
-    (fleet- args template-str escape [nil "FLEET_TEMPLATE"]))
-  ([args template-str escape src]
-    (partial (load-fleet-string (build args (parse template-str)) src) (escape-fn escape))))
+    (fleet- args template-str {}))
+  ([args template-str options]
+    (let [opts (merge default-opts options)]
+      (partial
+        (load-fleet-string
+          (build args (parse template-str))
+          (opts :file-path) (opts :file-name))
+        (escape-fn (opts :escaping))))))
 
 (defmacro fleet
   "Creates anonymous function from template containing in template-str."
@@ -57,17 +66,18 @@
     (doseq [{:keys [ns names]} tpl-infos]
       (create-ns (symbol ns))
       (doseq [n names]
-        (eval `(do (ns ~ns) (def ~n)))))))
+        (eval `(do (ns ~ns) (def ~n nil)))))))
 
 (defn- assign-path-templates
   [root-path filter escape]
   (let [tpl-infos (make-tpl-infos root-path (filter-fn filter))]
-    (doseq [{:keys [ns names content src]} tpl-infos]
+    (doseq [{:keys [ns names content file-path file-name]} tpl-infos]
       (let [arg-names [(last names) 'data]
-            tpl (fleet- arg-names content escape src)
+            opts {:escaping escape, :file-path file-path, :file-name file-name}
+            tpl (fleet- arg-names content opts)
             wrapper (fn ([a] (tpl a a)) ([a data] (tpl a data)))]
         (doseq [n names]
-          (when-not (.hasRoot (ns-resolve ns n))
+          (when-not @(ns-resolve ns n)
             (eval `(do (ns ~ns) (def ~n ~wrapper)))))))))
 
 (defn fleet-ns
