@@ -17,7 +17,7 @@
 (deftest error-reporting-test
   (fleet-ns "src/test/fleet/ns")
 
-  (let [e (is (thrown? Exception ((resolve 'posts/exceptional) nil)))
+  (let [e (is (thrown? ClassCastException ((resolve 'posts/exceptional))))
         ste (first (.getStackTrace e))]
     (is (= (.getFileName ste) "exceptional.fleet"))
     (is (= (.getLineNumber ste) 4))))

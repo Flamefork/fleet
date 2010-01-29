@@ -79,7 +79,8 @@ Treats root-path as root of template namespaceand creates template functions for
 Template function creation conventions:   
 — Several functions will be created for each file. E.g. file `posts.html.fleet` will produce 3 functions: `posts`, `posts-html` and `posts-html-fleet`.  
 — Template function will take one or two arguments: first named same as shortest function name for file (`posts` in previous example) and second named `data`.  
-— When it's called with one arguments both symbols (fn-name and data) are bound to same value of this argument.
+— When it's called with one arguments both symbols (fn-name and data) are bound to same value of this argument.  
+— When it's called with no arguments both symbols (fn-name and data) are bound to nil.
 
 Filters argument is vector of file-filter -> escape-fn pairs used to filter which files to process and with which escaping function.
 File filters could be defined as function, string, regex, :fleet or :all.  

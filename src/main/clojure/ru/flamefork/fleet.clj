@@ -75,7 +75,7 @@
       (let [arg-names [(last names) 'data]
             opts {:escaping escape, :file-path file-path, :file-name file-name}
             tpl (fleet- arg-names content opts)
-            wrapper (fn ([a] (tpl a a)) ([a data] (tpl a data)))]
+            wrapper (fn ([] (tpl nil nil)) ([a] (tpl a a)) ([a data] (tpl a data)))]
         (doseq [n names]
           (when-not @(ns-resolve ns n)
             (eval `(do (ns ~ns) (def ~n ~wrapper)))))))))
