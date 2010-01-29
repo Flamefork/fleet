@@ -53,7 +53,7 @@ Use some `escape-mylang` to work with other languages.
 0. `DONE` Anonymous templates
 0. `DONE` Recursive load/register templates in specified path
 0. `DONE` Language contexts: different escaping functions for different file masks (e.g. post.html.fleet and post.json.fleet to use html and js escaping)
-0. Error reporting
+0. `IN PROGRESS` Error reporting
 0. Get rid of antlr dependency (reimplement parser)
 0. Support escaping of Fleet tokens (like \<( to bypass parsing it)
 0. Cleanup
@@ -138,7 +138,9 @@ Template file (`post_dedicated.fleet`):
     
     <p><(str notice)></p>
     
-    <(; Begin of post)>
+    <(
+    ; Begin of post
+    )>
     <(inside-frame (let [p post] ">
       Author: <(p :author)><br/>
       Date: <(p :date)><br/>
@@ -150,7 +152,9 @@ Template file (`post_dedicated.fleet`):
         <li><(str tag)></li>
       <")>
     </ul>
-    <(; End of post)>
+    <(
+    ; End of post
+    )>
 
     <(footer)>
     </body>

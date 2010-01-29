@@ -51,7 +51,7 @@
     (readhtml "second/esc_posts_tpl"))))
 
 (deftest comments-test
-  (def tpl (fleet [] "<p><(; post :body)><(str \"asd\")></p>" :xml))
+  (def tpl (fleet [] "<p><(; post :body \n)><(str \"asd\")></p>" :xml))
   (is (= (tpl) "<p>asd</p>")))
 
 (deftest anonymous-tpls-test

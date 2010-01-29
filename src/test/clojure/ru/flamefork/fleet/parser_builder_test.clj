@@ -11,6 +11,5 @@
 (deftest build-test
   (let [ast (read-string (slurp "src/test/fleet/second/post_tpl.ast.clj"))
         clj (slurp "src/test/fleet/second/post_tpl.clj")]
-    (is (=
-      (build '(post) ast)
-      (read-string clj)))))
+;    (println (build '(post) ast))
+    (is (= (build '(post) ast) clj))))

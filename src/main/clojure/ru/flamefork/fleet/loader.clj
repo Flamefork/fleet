@@ -41,3 +41,10 @@
         nodes (file-seq root)
         files (filter file-filter nodes)]
     (map (partial make-tpl-info root) files)))
+
+(defn load-fleet-string
+  [s]
+  (-> s
+    (java.io.StringReader.)
+    (clojure.lang.LineNumberingPushbackReader.)
+    (clojure.lang.Compiler/load nil "COMPILED_FLEET_TEMPLATE")))

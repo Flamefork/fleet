@@ -1,21 +1,17 @@
 (ns ru.flamefork.fleet.builder
   (:use
     [clojure.contrib.def]
-    [ru.flamefork.fleet.runtime])
+    [ru.flamefork.fleet runtime util])
   (:require
     [clojure.contrib.str-utils2 :as su]))
 
 (defn- consume)
 
-(defn- escape-string
-  [s]
-  (.replace (.replace s "\\" "\\\\") "\"" "\\\""))
-
 (defvar- consumers {
-  :text  #(str "(raw \"" (escape-string %) "\")")
-  :clj   #(str % "\n")
-  :embed #(raw (apply str ["(screen escape-fn (" (raw (apply str (map consume %))) "))"]))
-  :tpl   #(raw (apply str ["(screen escape-fn [" (raw (apply str (map consume %))) "])"]))
+  :text  #(str "\n(raw \"" (escape-string %) "\")")
+  :clj   bypass
+  :embed #(raw (apply str ["\n(screen escape-fn \n(" (raw (apply str (map consume %))) "))"]))
+  :tpl   #(raw (apply str ["\n(screen escape-fn [" (raw (apply str (map consume %))) "])"]))
   })
 
 (defn- consume
@@ -27,9 +23,8 @@
 (defn build
   "Build Clojure forms from template-str."
   [args ast]
-  (read-string (str "
-  (do
-    (use 'ru.flamefork.fleet)
-    (use 'ru.flamefork.fleet.runtime)
-    (fn [escape-fn " (su/join " " args) "]"
-    (consume ast) "))")))
+  (str
+    "(do\n"
+    "(use 'ru.flamefork.fleet.runtime)\n"
+    "(fn [escape-fn " (su/join " " args) "]"
+    (consume ast) "))\n"))

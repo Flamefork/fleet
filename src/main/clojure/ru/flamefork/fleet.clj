@@ -14,7 +14,7 @@
 (defvar- escape-fn
   (memoize (fn [escape]
     (condp = escape
-      :bypass (fn [s] s)
+      :bypass bypass
       :str escape-string
       :xml lx/escape-xml
       escape))))
@@ -23,7 +23,7 @@
   ([args template-str]
     (fleet- args template-str :bypass))
   ([args template-str escape]
-    (partial (eval (build args (parse template-str))) (escape-fn escape))))
+    (partial (load-fleet-string (build args (parse template-str))) (escape-fn escape))))
 
 (defmacro fleet
   "Creates anonymous function from template containing in template-str."
