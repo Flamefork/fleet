@@ -1,1 +1,1 @@
-$('#post').html("<p>First post.</p>\n");
+$('#post').html("<p class=\"body\">First post.</p>\n");

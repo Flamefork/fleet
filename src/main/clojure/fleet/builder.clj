@@ -10,8 +10,8 @@
 (defvar- consumers {
   :text  #(str "(raw \"" (escape-clj-string %) "\")")
   :clj   bypass
-  :embed #(raw (apply str ["(screen escape-fn (" (raw (apply str (map consume %))) "))"]))
-  :tpl   #(raw (apply str ["(screen escape-fn [" (raw (apply str (map consume %))) "])"]))
+  :embed #(apply str ["(screen (" (apply str (map consume %)) "))"])
+  :tpl   #(apply str ["(screen [" (apply str (map consume %)) "])"])
   })
 
 (defn- consume
@@ -24,7 +24,6 @@
   "Build Clojure forms from template-str."
   [args ast]
   (str
-    "(do "
-    "(use 'fleet.runtime)"
-    "(fn [escape-fn " (su/join " " args) "] "
+    "(fn [runtime " (su/join " " args) "] "
+    "(let [{:keys [raw raw? screen]} runtime] "
     (consume ast) "))"))

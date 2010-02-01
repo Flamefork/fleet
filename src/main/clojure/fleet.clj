@@ -8,7 +8,7 @@
     [clojure.contrib.lazy-xml :as lx])
   (:use
     [clojure.contrib.def]
-    [fleet parser builder loader util]))
+    [fleet parser builder loader util runtime]))
 
 ;;;;;;;;;; single template ;;;;;;;;;;
 
@@ -36,7 +36,7 @@
         (load-fleet-string
           (build args (parse template-str))
           (opts :file-path) (opts :file-name))
-        (escape-fn (opts :escaping))))))
+        (make-runtime (escape-fn (opts :escaping)))))))
 
 (defmacro fleet
   "Creates anonymous function from template containing in template-str."

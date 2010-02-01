@@ -3,18 +3,21 @@
     [clojure.lang Sequential IObj]
     [fleet.util CljString]))
 
+(defn- escaped-with
+  [s]
+  (or (-> s meta :escaped-with) {}))
+
 (defn raw
   "Prevent encoding of string."
-  [s]
-  (with-meta
-    (if (instance? IObj s)
-      s
-      (CljString. (.toString s)))
-    {:raw true}))
+  [f s]
+  (let [obj (-> s .toString CljString.)
+        new-escw (assoc (escaped-with s) f true)
+        new-meta (assoc (meta obj) :escaped-with new-escw)]
+    (with-meta obj new-meta)))
 
 (defn raw?
-  [s]
-  (:raw (meta s)))
+  [f s]
+  ((escaped-with s) f))
 
 (defmulti screen
   "Process and collect template string(s)."
@@ -22,12 +25,20 @@
 
 (defmethod screen CharSequence
   [f s]
-  (raw (if (raw? s) s (f s))))
+  (raw f (if (raw? f s) s (f s))))
 
 (defmethod screen Sequential
   [f s]
-  (raw (apply str (map (partial screen f) s))))
+  (raw f (apply str (map (partial screen f) s))))
 
 (defmethod screen nil
   [f s]
-  (raw ""))
+  (raw f ""))
+
+(defn make-runtime
+  "Create runtime functions applied to specified escape-fn."
+  [escape-fn]
+  { :raw    (partial raw escape-fn)
+    :raw?   (partial raw? escape-fn)
+    :screen (partial screen escape-fn)
+    })
