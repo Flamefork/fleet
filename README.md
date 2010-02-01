@@ -54,7 +54,8 @@ Main option is `:escaping`. It can be function of one String argument or keyword
 `:bypass` — default, no escaping;  
 `:xml` — XML (or HTML) rules;  
 `:str` — Java-compatible string escaping;  
-`:clj-str` — Clojure string escaping (`\n` is allowed).
+`:clj-str` — Clojure string escaping (`\n` is allowed);  
+`:regex` — Escaping of Regex special symbols.
 
 Options `:file-name` and `:file-path` of type String are used for error reporting (e.g. file-name will be in stacktrace along with line number).
 

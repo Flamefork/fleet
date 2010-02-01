@@ -1,4 +1,5 @@
-(ns fleet.util)
+(ns fleet.util
+  (:use [clojure.template]))
 
 (defn bypass
   "Just returns it's argument"
@@ -19,3 +20,21 @@
     (replace "\\" "\\\\")
     (replace "\"" "\\\"")
     (replace "\n" "\\n")))
+
+(defn escape-regex
+  "Escapes special Regex symbols."
+  [s]
+  (.. s
+    (replace "\\" "\\\\")
+    (replace "("  "\\(")
+    (replace ")"  "\\)")
+    (replace "."  "\\.")
+    (replace "["  "\\[")
+    (replace "]"  "\\]")
+    (replace "^"  "\\^")
+    (replace "$"  "\\$")
+    (replace "|"  "\\|")
+    (replace "?"  "\\?")
+    (replace "*"  "\\*")
+    (replace "+"  "\\+")))
+

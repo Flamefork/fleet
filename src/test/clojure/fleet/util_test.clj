@@ -25,3 +25,10 @@
   (is (=
     (escape-string "asd\"qwe\\zxc\n")
     "asd\\\"qwe\\\\zxc\\n")))
+
+(deftest escape-regex-test
+  (let [s "^\\.([?*|+$]).//^"]
+    (is (-> s
+      escape-regex
+      re-pattern
+      (re-matches s)))))

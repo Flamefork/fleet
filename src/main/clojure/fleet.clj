@@ -19,6 +19,7 @@
       :str escape-string
       :clj-str escape-clj-string
       :xml lx/escape-xml
+      :regex escape-regex
       escape))))
 
 (defvar- default-opts {
