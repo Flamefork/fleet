@@ -1,4 +1,4 @@
-(ns fleet.parser2
+(ns fleet.parser
   (:use
     [clojure.contrib def]
     [fleet.util])

@@ -8,7 +8,7 @@
     [clojure.contrib.lazy-xml :as lx])
   (:use
     [clojure.contrib.def]
-    [fleet parser2 builder loader util runtime]))
+    [fleet parser builder loader util runtime]))
 
 ;;;;;;;;;; single template ;;;;;;;;;;
 
