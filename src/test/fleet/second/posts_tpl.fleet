@@ -1,1 +1,1 @@
-<div><(map ru.flamefork.fleet-lang-test/post-tpl posts)></div>
+<div><(map fleet-lang-test/post-tpl posts)></div>

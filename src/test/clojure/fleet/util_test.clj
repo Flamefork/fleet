@@ -1,7 +1,16 @@
-(ns ru.flamefork.fleet.util-test
+(ns fleet.util-test
   (:use
     [clojure.test]
-    [ru.flamefork.fleet.util]))
+    [fleet.util])
+  (:import
+    [fleet.util CljString]))
+
+
+(deftest clj-string-with-meta-test
+  (let [asd (CljString. "test")
+        asd-w-meta (with-meta asd {:asd 123})]
+    (is (= (meta asd-w-meta) {:asd 123}))
+    (is (= asd-w-meta asd))))
 
 (deftest bypass-test
   (let [obj (java.lang.Object.)]

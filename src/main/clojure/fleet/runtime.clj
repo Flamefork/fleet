@@ -1,7 +1,7 @@
-(ns ru.flamefork.fleet.runtime
+(ns fleet.runtime
   (:import
     [clojure.lang Sequential IObj]
-    [ru.flamefork.util CljString]))
+    [fleet.util CljString]))
 
 (defn raw
   "Prevent encoding of string."

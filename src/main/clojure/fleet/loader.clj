@@ -1,4 +1,4 @@
-(ns ru.flamefork.fleet.loader
+(ns fleet.loader
   (:import java.io.File)
   (:require
     [clojure.contrib.str-utils2 :as su]))

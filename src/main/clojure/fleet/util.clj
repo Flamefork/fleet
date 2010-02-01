@@ -1,4 +1,4 @@
-(ns ru.flamefork.fleet.util)
+(ns fleet.util)
 
 (defn bypass
   "Just returns it's argument"

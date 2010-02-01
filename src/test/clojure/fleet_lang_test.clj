@@ -1,8 +1,8 @@
-(ns ru.flamefork.fleet-lang-test
+(ns fleet-lang-test
   (:require clojure.contrib.lazy-xml)
   (:use
     [clojure.test]
-    [ru.flamefork.fleet]))
+    [fleet]))
 
 (defmacro fileet
   "Convinient way to define test templates"

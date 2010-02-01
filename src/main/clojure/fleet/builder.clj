@@ -1,7 +1,7 @@
-(ns ru.flamefork.fleet.builder
+(ns fleet.builder
   (:use
     [clojure.contrib.def]
-    [ru.flamefork.fleet runtime util])
+    [fleet runtime util])
   (:require
     [clojure.contrib.str-utils2 :as su]))
 
@@ -25,6 +25,6 @@
   [args ast]
   (str
     "(do "
-    "(use 'ru.flamefork.fleet.runtime)"
+    "(use 'fleet.runtime)"
     "(fn [escape-fn " (su/join " " args) "] "
     (consume ast) "))"))

@@ -1,8 +1,8 @@
-(ns ru.flamefork.fleet.runtime-test
+(ns fleet.runtime-test
   (:require clojure.contrib.lazy-xml)
   (:use
     [clojure.test]
-    [ru.flamefork.fleet.runtime]))
+    [fleet.runtime]))
 
 (def escape-fn clojure.contrib.lazy-xml/escape-xml)
 

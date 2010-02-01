@@ -1,4 +1,4 @@
-package ru.flamefork.util;
+package fleet.util;
 
 import clojure.lang.*;
 

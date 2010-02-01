@@ -1,7 +1,7 @@
-(ns ru.flamefork.fleet.parser-builder-test
+(ns fleet.parser-builder-test
   (:use
     [clojure.test]
-    [ru.flamefork.fleet parser builder]))
+    [fleet parser builder]))
 
 (deftest parse-test
   (let [tpl (slurp "src/test/fleet/second/post_tpl.fleet")

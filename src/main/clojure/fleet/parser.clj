@@ -1,7 +1,7 @@
-(ns ru.flamefork.fleet.parser
+(ns fleet.parser
   (:import
     [org.antlr.runtime Token ANTLRStringStream CommonTokenStream]
-    [ru.flamefork.fleet FleetLexer FleetParser])
+    [fleet.parser FleetLexer FleetParser])
   (:use [clojure.contrib.def]))
 
 (defn- with-children

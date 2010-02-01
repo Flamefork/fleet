@@ -1,4 +1,4 @@
-(ns ru.flamefork.fleet
+(ns fleet
   (:import
     [java.io File]
     [java.util.regex Pattern]
@@ -8,7 +8,7 @@
     [clojure.contrib.lazy-xml :as lx])
   (:use
     [clojure.contrib.def]
-    [ru.flamefork.fleet parser builder loader util]))
+    [fleet parser builder loader util]))
 
 ;;;;;;;;;; single template ;;;;;;;;;;
 

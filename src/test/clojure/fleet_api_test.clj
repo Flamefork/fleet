@@ -1,7 +1,7 @@
-(ns ru.flamefork.fleet-api-test
+(ns fleet-api-test
   (:use
     [clojure.test]
-    [ru.flamefork.fleet]))
+    [fleet]))
 
 (def test-posts [{:body "First post."}
                  {:body "Second post."}])

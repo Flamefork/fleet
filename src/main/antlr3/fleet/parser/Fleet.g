@@ -5,11 +5,11 @@ options {
 }
 
 @lexer::header {
-	package ru.flamefork.fleet;
+	package fleet.parser;
 }
 
 @header {
-	package ru.flamefork.fleet;
+	package fleet.parser;
 }
 
 @lexer::members {
