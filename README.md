@@ -42,28 +42,13 @@ Need to bypass escaping?
 Not writing HTML at all? Use fleet with default (bypassing) escape function.  
 Use some `escape-mylang` to work with other languages.
 
-## Roadmap
-
-0. `DONE` Language design
-0. `DONE` API design
-0. `DONE` Parser
-0. `DONE` Builder
-0. `DONE` Infrastructure
-0. `DONE` Auto HTML-escaping
-0. `DONE` Anonymous templates
-0. `DONE` Recursive load/register templates in specified path
-0. `DONE` Language contexts: different escaping functions for different file masks (e.g. post.html.fleet and post.json.fleet to use html and js escaping)
-0. `DONE` Error reporting
-0. Get rid of antlr dependency (reimplement parser)
-0. Support escaping of Fleet tokens (like \<( to bypass parsing it)
-0. Cleanup
-
-`DONE` = First rough version.
-
 ## API
 
-`(fleet [& args] template-str options)`  
-Creates anonymous function from template-str using provided options map.
+### Single anonymous template: `fleet`
+
+`(fleet [& args] template-str options)`
+
+Creates anonymous function from `template-str` using provided `options` map.
 
 Main option is `:escaping`. It can be function of one String argument or keyword specifying one of predefined functions:  
 `:bypass` — default, no escaping;  
@@ -73,8 +58,11 @@ Main option is `:escaping`. It can be function of one String argument or keyword
 
 Options `:file-name` and `:file-path` of type String are used for error reporting (e.g. file-name will be in stacktrace along with line number).
 
-`(fleet-ns root-path filters)`  
-Treats root-path as root of template namespaceand creates template functions for each file in it with name according to relative path.
+### Template namespace: `fleet-ns`
+
+`(fleet-ns root-path filters)`
+
+Treats `root-path` as root of template namespace and creates template functions for each file in it with name according to relative path.
 
 Template function creation conventions:   
 — Several functions will be created for each file. E.g. file `posts.html.fleet` will produce 3 functions: `posts`, `posts-html` and `posts-html-fleet`.  
@@ -82,9 +70,9 @@ Template function creation conventions:
 — When it's called with one arguments both symbols (fn-name and data) are bound to same value of this argument.  
 — When it's called with no arguments both symbols (fn-name and data) are bound to nil.
 
-Filters argument is vector of file-filter -> escape-fn pairs used to filter which files to process and with which escaping function.
+Filters argument is vector of `file-filter escape-fn` pairs used to filter which files to process and with which escaping function.
 File filters could be defined as function, string, regex, :fleet or :all.  
-— Function should have one File argument and Boolean type.  
+— Function should have Boolean type and one File argument.  
 — String filter definition treated as `*.string.fleet` mask, e.g. `"js"` mask will match `update.js.fleet`.  
 — Regex filter matches whole filename, e.g. `#".*.html"` will match `posts.html`.  
 — `:fleet` filter is treated as "others". If it is set all `*.fleet` files will be processed.  
@@ -92,22 +80,26 @@ File filters could be defined as function, string, regex, :fleet or :all.
 
 ## Template Language
 
-Main Fleet construction is Spaceship `<()>`, just cause (star)fleet consists of many spaceships.
+### Main Fleet construction is Spaceship `<()>`.
+
+...just cause (star)fleet consists of many spaceships.
 
 `<()>` is almost equivalent to `()`, so
 `<h1><(body)></h1>` in Fleet is nearly the same as `(str "<h1>" (body) "</h1>")` in Clojure.
 
-The only difference is that `(body)` output gets html-encoded to prevent XSS.
-Use `raw` function to prevent encoding: `<(raw "<br/>")>`.
+The only difference is that `(body)` output gets escaped (e.g. html-encoded to prevent XSS).  
+Use `raw` function to prevent encoding: `<(raw "<br/>")>`.  
 Use `str` function to place value `<(str posts-count)>`.
 
 This seems to be complete system, but writing something like
     <(raw (for [p posts]
       (str "<li class=\"post\">" (p :title) "</li>")))>
-is too ugly.. And defining `<li class="post"><(p :title)></li>` as separate template
+is too ugly..  
+And defining `<li class="post"><(p :title)></li>` as separate template
 can be overkill in many cases. So there should be the way of embedding strings and anonymous templates.
 
-Slipway construction `"><"` intended for embedding strings.
+### Slipway construction `"><"` intended for embedding strings.
+
 The previous example could be rewritten using Slipway as
     <(for [p posts] ">
       <li class="post"><(p :title)></li>
