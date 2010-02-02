@@ -1,28 +1,20 @@
 (ns fleet.parser
   (:use
-    [clojure.contrib def]
-    [fleet.util])
+    [clojure.contrib def])
   (:require
-    [clojure.contrib.str-utils2 :as su]
     [clojure.zip :as z])
   (:import
     [java.util.regex Pattern]))
 
 ;;;;;;;;;; lexer ;;;;;;;;;;
 
-(defn- make-token-regex
-  [tokens]
-  (Pattern/compile (str "^(.*?)(" (su/join "|" (map escape-regex tokens)) ")") Pattern/DOTALL))
-
 (defvar- token-regexs {
-  true (make-token-regex [")>" "\">"])
-  false (make-token-regex ["<(" "<\""])})
+  true  (Pattern/compile (str "^(.*?)(\\)>|\">)") Pattern/DOTALL)
+  false (Pattern/compile (str "^(.*?)(<\\(|<\")") Pattern/DOTALL)})
 
 (defn- token-seq
   [input]
-  (loop [input input
-         mode false
-         ast []]
+  (loop [input input, mode false, ast []]
     (let [found (re-find (re-matcher (token-regexs mode) input))
           [pair text token] (or found [input input nil])
           ast (if (empty? text) ast (conj ast text))]
@@ -33,17 +25,13 @@
 ;;;;;;;;;; parser ;;;;;;;;;;
 
 (defvar- consumers {
-  true {
-    ")>"  (fn [token loc] [false (-> loc z/up z/up)])
-    "\">" (fn [token loc] [false (-> loc (z/append-child [:tpl []]) z/down z/rightmost z/down z/rightmost)])
-    :text (fn [token loc] [true  (-> loc (z/append-child [:clj token]))])
-    }
-  false {
-    "<\"" (fn [token loc] [true  (-> loc z/up z/up)])
-    "<("  (fn [token loc] [true  (-> loc (z/append-child [:embed []]) z/down z/rightmost z/down z/rightmost)])
-    :text (fn [token loc] [false (-> loc (z/append-child [:text token]))])
-    }
-  })
+  ")>"  (fn [_ loc] [false (-> loc z/up z/up)])
+  "<\"" (fn [_ loc] [true  (-> loc z/up z/up)])
+  "<("  (fn [_ loc] [true  (-> loc (z/append-child [:embed []]) z/down z/rightmost z/down z/rightmost)])
+  "\">" (fn [_ loc] [false (-> loc (z/append-child [:tpl   []]) z/down z/rightmost z/down z/rightmost)])
+  :text {
+    true  (fn [token loc] [true  (-> loc (z/append-child [:clj token]))])
+    false (fn [token loc] [false (-> loc (z/append-child [:text token]))])}})
 
 (defn- make-ast
   [tokens]
@@ -52,8 +40,7 @@
          loc (z/vector-zip [])]
     (if (first tokens)
       (let [token (first tokens)
-            consumers (consumers mode)
-            consumer (consumers token (consumers :text))
+            consumer (consumers token ((consumers :text) mode))
             [mode loc] (consumer token loc)]
         (recur (rest tokens) mode loc))
       (first (z/root loc)))))
