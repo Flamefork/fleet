@@ -9,10 +9,12 @@
 (def test-data {:title "Posts"})
 
 (deftest fleet-ns-test
-  (fleet-ns "src/test/fleet/ns")
-  (is (=
-    ((resolve 'posts/posts-html) test-posts test-data)
-    (slurp "src/test/fleet/ns/posts/posts.html"))))
+  (let [initial-ns *ns*]
+    (fleet-ns "src/test/fleet/ns")
+    (is (= *ns* initial-ns))
+    (is (=
+      ((resolve 'posts/posts-html) test-posts test-data)
+      (slurp "src/test/fleet/ns/posts/posts.html")))))
 
 (deftest error-reporting-test
   (fleet-ns "src/test/fleet/ns")

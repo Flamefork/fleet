@@ -38,3 +38,12 @@
     (replace "*"  "\\*")
     (replace "+"  "\\+")))
 
+; copied from clojure.contrib.with-ns;
+; removed eval to support lexical bindings
+(defmacro within-ns
+  "Evaluates body in another namespace.  ns is either a namespace
+  object or a symbol.  This makes it possible to define functions in
+  namespaces other than the current one."
+  [ns & body]
+  `(binding [*ns* (the-ns ~ns)] ~@body))
+

@@ -7,7 +7,7 @@
     [clojure.contrib.str-utils2 :as su]
     [clojure.contrib.lazy-xml :as lx])
   (:use
-    [clojure.contrib.def]
+    [clojure.contrib def]
     [fleet parser builder loader util runtime]))
 
 ;;;;;;;;;; single template ;;;;;;;;;;
@@ -64,10 +64,13 @@
 (defn- def-path-vars
   [root-path filter escape]
   (let [tpl-infos (make-tpl-infos root-path (filter-fn filter))]
-    (doseq [{:keys [ns names]} tpl-infos]
+    (doseq [ns (distinct (map :ns tpl-infos))]
       (create-ns (symbol ns))
-      (doseq [n names]
-        (eval `(do (ns ~ns) (def ~n nil)))))))
+      (within-ns ns
+        (clojure.core/refer-clojure)
+        (use 'fleet)))
+    (doseq [{:keys [ns names]} tpl-infos, n names]
+      (intern ns n nil))))
 
 (defn- assign-path-templates
   [root-path filter escape]
@@ -75,11 +78,11 @@
     (doseq [{:keys [ns names content file-path file-name]} tpl-infos]
       (let [arg-names [(last names) 'data]
             opts {:escaping escape, :file-path file-path, :file-name file-name}
-            tpl (fleet- arg-names content opts)
+            tpl (within-ns ns (fleet- arg-names content opts))
             wrapper (fn ([] (tpl nil nil)) ([a] (tpl a a)) ([a data] (tpl a data)))]
         (doseq [n names]
           (when-not @(ns-resolve ns n)
-            (eval `(do (ns ~ns) (def ~n ~wrapper)))))))))
+            (intern ns n wrapper)))))))
 
 (defn fleet-ns
   "Treats root-path as root of template namespaceand creates template
