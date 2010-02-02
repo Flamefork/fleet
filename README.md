@@ -121,6 +121,12 @@ With Slipway it can be replaced with
 
 Need to mention that all this supports lexical scoping and other Clojure fectures just like reference (previous) expression.
 
+### More on escaping
+
+If you need to insert Fleet constructions into text you can escape them using backslash.  
+You only need escaping to remove ambiguity,
+so use `\<(` and `\<"` only outside embedded clojure code,  `\">` and `\)>` only inside embedded clojure code.
+
 ## Examples
 
 ### Language
@@ -135,6 +141,8 @@ Template file (`post_dedicated.fleet`):
     <body>
     
     <p><(str notice)></p>
+    
+    <p>Spaceship \<()> is landing.</p>
     
     <(
     ; Begin of post
