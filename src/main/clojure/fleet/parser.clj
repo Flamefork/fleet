@@ -8,9 +8,12 @@
 
 ;;;;;;;;;; lexer ;;;;;;;;;;
 
+(defvar- escaped-tokens
+    #{"\\)>" "\\\">" "\\<(" "\\<\""})
+
 (defvar- token-regexs {
-  true  (Pattern/compile (str "^(.*?)(\\)>|\">)") Pattern/DOTALL)
-  false (Pattern/compile (str "^(.*?)(<\\(|<\")") Pattern/DOTALL)})
+  true  (Pattern/compile (str "^(.*?)(\\)>|\">|\\\\\\)>|\\\\\">)") Pattern/DOTALL)
+  false (Pattern/compile (str "^(.*?)(<\\(|<\"|\\\\<\\(|\\\\<\")") Pattern/DOTALL)})
 
 (defn- token-seq
   [input]
@@ -19,10 +22,17 @@
           [pair text token] (or found [input input nil])
           ast (if (empty? text) ast (conj ast text))]
       (if token
-        (recur (.substring input (.length pair)) (not mode) (conj ast token))
+        (let [rest (.substring input (.length pair))
+              mode (if (escaped-tokens token) mode (not mode))
+              ast (conj ast token)]
+          (recur rest mode ast))
         ast))))
 
 ;;;;;;;;;; parser ;;;;;;;;;;
+
+(defn- unescape-token
+  [s]
+  (if (escaped-tokens s) (.substring s 1) s))
 
 (defvar- consumers {
   ")>"  (fn [_ loc] [false (-> loc z/up z/up)])
@@ -30,8 +40,8 @@
   "<("  (fn [_ loc] [true  (-> loc (z/append-child [:embed []]) z/down z/rightmost z/down z/rightmost)])
   "\">" (fn [_ loc] [false (-> loc (z/append-child [:tpl   []]) z/down z/rightmost z/down z/rightmost)])
   :text {
-    true  (fn [token loc] [true  (-> loc (z/append-child [:clj token]))])
-    false (fn [token loc] [false (-> loc (z/append-child [:text token]))])}})
+    true  (fn [token loc] [true  (-> loc (z/append-child [:clj  (unescape-token token)]))])
+    false (fn [token loc] [false (-> loc (z/append-child [:text (unescape-token token)]))])}})
 
 (defn- make-ast
   [tokens]

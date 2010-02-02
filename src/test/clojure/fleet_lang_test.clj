@@ -65,3 +65,15 @@
   (is (=
     (post-body test-post)
     "First Post")))
+
+(deftest escaped-fleet-symbols-test
+  (is (=
+    ((fleet [] "qwe\\<(asd\\<\"zxc"))
+    "qwe<(asd<\"zxc"))
+  (is (=
+    ((fleet [] "qwe\">asd)>zxc"))
+    "qwe\">asd)>zxc"))
+  (is (=
+    ((fleet [] "<(str \"qwe\\\\\">asd\\)>zxc\")>"))
+    "qwe\">asd)>zxc"))
+  )
