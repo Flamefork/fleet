@@ -28,21 +28,21 @@
   :file-path nil
   })
 
-(defn fleet-
-  ([args template-str]
-    (fleet- args template-str {}))
-  ([args template-str options]
-    (let [opts (merge default-opts options)]
-      (partial
-        (load-fleet-string
-          (build args (parse template-str))
-          (opts :file-path) (opts :file-name))
-        (make-runtime (escape-fn (opts :escaping)))))))
+(defn -fleet
+  [args template-str options]
+  (let [opts (merge default-opts options)]
+    (partial
+      (load-fleet-string
+        (build args (parse template-str))
+        (opts :file-path) (opts :file-name))
+      (make-runtime (escape-fn (opts :escaping))))))
 
 (defmacro fleet
   "Creates anonymous function from template containing in template-str."
-  [args & more]
-  `(fleet- '~args ~@more))
+  ([args template-str]
+    `(-fleet '~args ~template-str {}))
+  ([args template-str options]
+    `(-fleet '~args ~template-str ~options)))
 
 ;;;;;;;;;; template namespace ;;;;;;;;;;
 
@@ -84,7 +84,7 @@
       (let [ns (build-ns root-ns ns)
             arg-names [(last names) 'data]
             opts {:escaping escape, :file-path file-path, :file-name file-name}
-            tpl (within-ns ns (fleet- arg-names content opts))
+            tpl (within-ns ns (-fleet arg-names content opts))
             wrapper (fn ([] (tpl nil nil)) ([a] (tpl a a)) ([a data] (tpl a data)))]
         (doseq [n names]
           (when-not @(ns-resolve ns n)
