@@ -7,6 +7,7 @@
     [clojure.contrib.lazy-xml :as lx])
   (:use
     [clojure.contrib def]
+    [clojure.template]
     [fleet parser builder loader util runtime]))
 
 ;;;;;;;;;; single template ;;;;;;;;;;
@@ -89,15 +90,20 @@
           (when-not @(ns-resolve ns n)
             (intern ns n wrapper)))))))
 
-(defn fleet-ns
+(defn -fleet-ns
+  [root-ns root-path filters]
+  (when-not (even? (count filters))
+    (throw (IllegalArgumentException. "fleet-ns requires an even number of forms in filters vector")))
+  (do-template [f]
+    (doseq [[filter escape] (partition 2 filters)]
+      (f root-ns root-path filter escape))
+    def-path-vars assign-path-templates))
+
+(defmacro fleet-ns
   "Treats root-path as root of template namespaceand creates template
   function for each file in it with name corresponding to relative path."
-  ([root-ns root-path] (fleet-ns root-ns root-path [:fleet :bypass]))
+  ([root-ns root-path]
+    `(-fleet-ns '~root-ns ~root-path [:fleet :bypass]))
   ([root-ns root-path filters]
-    (when-not (even? (count filters))
-      (throw (IllegalArgumentException. "fleet-ns requires an even number of forms in filters vector")))
-    (doseq [[filter escape] (partition 2 filters)]
-      (def-path-vars root-ns root-path filter escape))
-    (doseq [[filter escape] (partition 2 filters)]
-      (assign-path-templates root-ns root-path filter escape))))
+    `(-fleet-ns '~root-ns ~root-path ~filters)))
 

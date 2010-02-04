@@ -8,30 +8,33 @@
 
 (def test-data {:title "Posts"})
 
+(def filters [
+  "js" :str
+  "html" :xml
+  :fleet :bypass])
+
+(fleet-ns tpl "src/test/fleet/ns" filters)
+
 (deftest fleet-ns-test
   (let [initial-ns *ns*]
-    (fleet-ns 'tpl "src/test/fleet/ns")
+    (fleet-ns 'tpl "src/test/fleet/ns" filters)
     (is (= *ns* initial-ns))
     (is (=
-      ((resolve 'tpl.posts/posts-html) test-posts test-data)
+      (tpl.posts/posts-html test-posts test-data)
       (slurp "src/test/fleet/ns/posts/posts.html")))))
 
 (deftest error-reporting-test
-  (fleet-ns 'tpl "src/test/fleet/ns")
-
-  (let [e (is (thrown? ClassCastException ((resolve 'tpl.posts/exceptional))))
+  (let [e (is (thrown? ClassCastException (tpl.posts/exceptional)))
         ste (first (.getStackTrace e))]
     (is (= (.getFileName ste) "exceptional.fleet"))
     (is (= (.getLineNumber ste) 4))))
 
 (deftest cross-lang-test
-  (fleet-ns 'tpl "src/test/fleet/ns", ["js" :str, "html" :xml])
   (is (=
-    ((resolve 'tpl.posts/update) (first test-posts))
+    (tpl.posts/update (first test-posts))
     (slurp "src/test/fleet/ns/posts/update.js"))))
 
 (deftest layout-test
-  (fleet-ns 'tpl "src/test/fleet/ns")
   (is (=
-    ((resolve 'tpl/layout) ((resolve 'tpl.posts/posts-html) test-posts test-data))
+    (tpl/layout (tpl.posts/posts-html test-posts test-data))
     (slurp "src/test/fleet/ns/posts/posts_with_layout.html"))))

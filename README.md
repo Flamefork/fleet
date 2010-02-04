@@ -61,9 +61,10 @@ Options `:file-name` and `:file-path` of type String are used for error reportin
 
 ### Template namespace: `fleet-ns`
 
-`(fleet-ns root-path filters)`
+`(fleet-ns root-ns root-path filters)`
 
-Treats `root-path` as root of template namespace and creates template functions for each file in it with name according to relative path.
+Treats `root-path` as root of template namespace with prefix `root-ns.` and creates template functions
+for each file in it with name and samespace according to relative path.
 
 Template function creation conventions:   
 — Several functions will be created for each file. E.g. file `posts.html.fleet` will produce 3 functions: `posts`, `posts-html` and `posts-html-fleet`.  
@@ -187,11 +188,12 @@ Directory tree
         file_b.html.fleet
       second_subdir/
         file_c.html.fleet
-will be treated and processed by `(fleet-ns "path/to/root_dir" [:fleet :xml])` as functions
-    first-subdir.file-a
-    first-subdir.file-b
-    second-subdir.file-c
-and (for example) first function will be
-    (defn first-subdir.file-a
+will be treated and processed by `(fleet-ns templates "path/to/root_dir" [:fleet :xml])` as functions
+    templates.first-subdir/file-a
+    templates.first-subdir/file-b
+    templates.second-subdir/file-c
+and (for example) first function will be like
+    (defn file-a
       ([file-a data] ...)
       ([file-a] (recur file-a file-a)))
+      ([] (recur nil nil)))
