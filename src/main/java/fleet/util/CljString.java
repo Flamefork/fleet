@@ -74,4 +74,13 @@ public class CljString extends Obj implements Comparable<CharSequence>, CharSequ
     public ISeq seq() {
         return RT.seq(s);
     }
+    
+    /*
+    Mimic useful String methods
+     */
+    
+    public CljString replace(CharSequence target, CharSequence replacement) {
+        return new CljString(meta(), s.replace(target, replacement));
+    }
+    
 }
