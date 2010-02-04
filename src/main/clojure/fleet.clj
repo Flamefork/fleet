@@ -4,7 +4,6 @@
     [java.util.regex Pattern]
     [clojure.lang IFn])
   (:require
-    [clojure.contrib.str-utils2 :as su]
     [clojure.contrib.lazy-xml :as lx])
   (:use
     [clojure.contrib def]
@@ -61,22 +60,28 @@
         IFn filter
         Pattern #(re-matches filter (.getName %)))))))
 
+(defvar- build-ns
+  (memoize (fn [prefix name]
+    (symbol (if (empty? (str name)) (str prefix) (str prefix "." name))))))
+
 (defn- def-path-vars
-  [root-path filter escape]
-  (let [tpl-infos (make-tpl-infos root-path (filter-fn filter))]
+  [root-ns root-path filter escape]
+  (let [tpl-infos (make-tpl-infos root-path (filter-fn filter))
+        full-ns (partial build-ns root-ns)]
     (doseq [ns (distinct (map :ns tpl-infos))]
-      (create-ns (symbol ns))
-      (within-ns ns
+      (create-ns (full-ns ns))
+      (within-ns (full-ns ns)
         (clojure.core/refer-clojure)
         (use 'fleet)))
     (doseq [{:keys [ns names]} tpl-infos, n names]
-      (intern ns n nil))))
+      (intern (full-ns ns) n nil))))
 
 (defn- assign-path-templates
-  [root-path filter escape]
+  [root-ns root-path filter escape]
   (let [tpl-infos (make-tpl-infos root-path (filter-fn filter))]
     (doseq [{:keys [ns names content file-path file-name]} tpl-infos]
-      (let [arg-names [(last names) 'data]
+      (let [ns (build-ns root-ns ns)
+            arg-names [(last names) 'data]
             opts {:escaping escape, :file-path file-path, :file-name file-name}
             tpl (within-ns ns (fleet- arg-names content opts))
             wrapper (fn ([] (tpl nil nil)) ([a] (tpl a a)) ([a data] (tpl a data)))]
@@ -87,12 +92,12 @@
 (defn fleet-ns
   "Treats root-path as root of template namespaceand creates template
   function for each file in it with name corresponding to relative path."
-  ([root-path] (fleet-ns root-path [:fleet :bypass]))
-  ([root-path filters]
+  ([root-ns root-path] (fleet-ns root-ns root-path [:fleet :bypass]))
+  ([root-ns root-path filters]
     (when-not (even? (count filters))
       (throw (IllegalArgumentException. "fleet-ns requires an even number of forms in filters vector")))
     (doseq [[filter escape] (partition 2 filters)]
-      (def-path-vars root-path filter escape))
+      (def-path-vars root-ns root-path filter escape))
     (doseq [[filter escape] (partition 2 filters)]
-      (assign-path-templates root-path filter escape))))
+      (assign-path-templates root-ns root-path filter escape))))
 

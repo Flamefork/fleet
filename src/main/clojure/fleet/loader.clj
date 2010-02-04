@@ -20,13 +20,19 @@
         names
         (recur (butlast s) (conj names s))))))
 
+(defn- path-diff
+  [prefix s]
+  {:pre [(.startsWith s prefix)]}
+  (.substring s (+ (.length prefix) 1)))
+
 (defn- relative-path
   "File path relative to root. Only if file inside root."
   [root file]
   (let [file-path (.getCanonicalPath file)
         root-path (.getCanonicalPath root)]
-    (when (.startsWith file-path root-path)
-      (.substring file-path (+ (.length root-path) 1)))))
+    (if (= file-path root-path)
+      ""
+      (path-diff root-path file-path))))
 
 (defn- make-tpl-info
   [root file]
