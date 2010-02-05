@@ -31,9 +31,9 @@
   [f s]
   (raw f (apply str (map (partial screen f) s))))
 
-(defmethod screen nil
+(defmethod screen :default
   [f s]
-  (raw f ""))
+  (raw f (str s)))
 
 (defn make-runtime
   "Create runtime functions applied to specified escape-fn."
