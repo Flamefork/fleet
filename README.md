@@ -197,3 +197,7 @@ and (for example) first function will be like
       ([file-a data] ...)
       ([file-a] (recur file-a file-a)))
       ([] (recur nil nil)))
+
+## License
+
+Copyright (c) 2010 Ilia Ablamonov, released under the MIT license.
