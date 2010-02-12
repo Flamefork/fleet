@@ -7,12 +7,12 @@
 (defmacro fileet
   "Convinient way to define test templates"
   [args filename]
-  `(fleet ~args (slurp (str "src/test/fleet/" ~filename ".fleet")) {:escaping :xml}))
+  `(fleet ~args (slurp (str "test/resources/" ~filename ".fleet")) {:escaping :xml}))
 
 (defmacro readhtml
   "Convinient way to read test data"
   [filename]
-  `(slurp (str "src/test/fleet/" ~filename ".html")))
+  `(slurp (str "test/resources/" ~filename ".html")))
 
 (def test-posts
   [{:body "First Post"  :tags ["tag1" "tag2" "tag3"]},

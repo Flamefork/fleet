@@ -13,15 +13,15 @@
   "html" :xml
   :fleet :bypass])
 
-(fleet-ns tpl "src/test/fleet/ns" filters)
+(fleet-ns tpl "test/resources/ns" filters)
 
 (deftest fleet-ns-test
   (let [initial-ns *ns*]
-    (fleet-ns 'tpl "src/test/fleet/ns" filters)
+    (fleet-ns 'tpl "test/resources/ns" filters)
     (is (= *ns* initial-ns))
     (is (=
       (tpl.posts/posts-html test-posts test-data)
-      (slurp "src/test/fleet/ns/posts/posts.html")))))
+      (slurp "test/resources/ns/posts/posts.html")))))
 
 (deftest error-reporting-test
   (let [e (is (thrown? ClassCastException (tpl.posts/exceptional)))
@@ -32,9 +32,9 @@
 (deftest cross-lang-test
   (is (=
     (tpl.posts/update (first test-posts))
-    (slurp "src/test/fleet/ns/posts/update.js"))))
+    (slurp "test/resources/ns/posts/update.js"))))
 
 (deftest layout-test
   (is (=
     (tpl/layout (tpl.posts/posts-html test-posts test-data))
-    (slurp "src/test/fleet/ns/posts/posts_with_layout.html"))))
+    (slurp "test/resources/ns/posts/posts_with_layout.html"))))
