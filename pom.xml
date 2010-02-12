@@ -4,7 +4,7 @@
     <groupId>fleet</groupId>
     <artifactId>fleet</artifactId>
     <packaging>jar</packaging>
-    <version>0.9.1</version>
+    <version>0.9.2-SNAPSHOT</version>
     <name>fleet</name>
     <url>http://github.com/Flamefork/fleet</url>
     <properties>

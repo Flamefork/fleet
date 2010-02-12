@@ -35,13 +35,14 @@
   (if (escaped-tokens s) (.substring s 1) s))
 
 (defvar- consumers {
-  ")>"  (fn [_ loc] [false (-> loc z/up z/up)])
-  "<\"" (fn [_ loc] [true  (-> loc z/up z/up)])
-  "<("  (fn [_ loc] [true  (-> loc (z/append-child [:embed []]) z/down z/rightmost z/down z/rightmost)])
-  "\">" (fn [_ loc] [false (-> loc (z/append-child [:tpl   []]) z/down z/rightmost z/down z/rightmost)])
-  :text {
-    true  (fn [token loc] [true  (-> loc (z/append-child [:clj  (unescape-token token)]))])
-    false (fn [token loc] [false (-> loc (z/append-child [:text (unescape-token token)]))])}})
+  true {
+    ")>"  (fn [_ loc] [false (-> loc z/up z/up)])
+    "\">" (fn [_ loc] [false (-> loc (z/append-child [:tpl []]) z/down z/rightmost z/down z/rightmost)])
+    :text (fn [t loc] [true  (-> loc (z/append-child [:clj (unescape-token t)]))])}
+  false {
+    "<\"" (fn [_ loc] [true  (-> loc z/up z/up)])
+    "<("  (fn [_ loc] [true  (-> loc (z/append-child [:embed []]) z/down z/rightmost z/down z/rightmost)])
+    :text (fn [t loc] [false (-> loc (z/append-child [:text (unescape-token t)]))])}})
 
 (defn- make-ast
   [tokens]
@@ -50,7 +51,8 @@
          loc (z/vector-zip [])]
     (if (first tokens)
       (let [token (first tokens)
-            consumer (consumers token ((consumers :text) mode))
+            mc (consumers mode)
+            consumer (mc token (mc :text))
             [mode loc] (consumer token loc)]
         (recur (rest tokens) mode loc))
       (first (z/root loc)))))

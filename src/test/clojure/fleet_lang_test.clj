@@ -76,4 +76,6 @@
   (is (=
     ((fleet [] "<(str \"qwe\\\\\">asd\\)>zxc\")>"))
     "qwe\">asd)>zxc"))
-  )
+  (is (=
+    (str ((fleet [] "<qwe asd=\"<(str \"zxc\")>\"><(str \"qwe\")>")))
+    "<qwe asd=\"zxc\">qwe")))
