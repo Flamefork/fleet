@@ -1,8 +1,5 @@
 (ns fleet-lang-test
-  (:require clojure.contrib.lazy-xml)
-  (:use
-    [clojure.test]
-    [fleet]))
+  (:use clojure.test fleet))
 
 (defmacro fileet
   "Convinient way to define test templates"
@@ -27,7 +24,7 @@
     (readhtml "first/test_tpl"))))
 
 (deftest deftemplate-test
-  (def single-post (fleet [post] "<p><(post :body)></p>" {:escaping clojure.contrib.lazy-xml/escape-xml}))
+  (def single-post (fleet [post] "<p><(post :body)></p>" {:escaping str}))
   (is (=
     (single-post test-post)
     "<p>First Post</p>")))

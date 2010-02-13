@@ -1,10 +1,10 @@
 (ns fleet.parser
-  (:use
-    [clojure.contrib def])
+  (:import
+    java.util.regex.Pattern)
   (:require
     [clojure.zip :as z])
-  (:import
-    [java.util.regex Pattern]))
+  (:use
+    clojure.contrib.def))
 
 ;;;;;;;;;; lexer ;;;;;;;;;;
 

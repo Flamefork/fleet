@@ -1,13 +1,13 @@
 (ns fleet
   (:import
-    [java.io File]
-    [java.util.regex Pattern]
-    [clojure.lang IFn])
+    java.io.File
+    java.util.regex.Pattern
+    clojure.lang.IFn)
   (:require
     [clojure.contrib.lazy-xml :as lx])
   (:use
-    [clojure.contrib def]
-    [clojure.template]
+    clojure.contrib.def
+    clojure.template
     [fleet parser builder loader util runtime]))
 
 ;;;;;;;;;; single template ;;;;;;;;;;

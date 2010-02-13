@@ -1,5 +1,4 @@
-(ns fleet.util
-  (:use [clojure.template]))
+(ns fleet.util)
 
 (defn bypass
   "Just returns it's argument"

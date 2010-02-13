@@ -1,9 +1,9 @@
 (ns fleet.builder
-  (:use
-    [clojure.contrib.def]
-    [fleet runtime util])
   (:require
-    [clojure.contrib.str-utils2 :as su]))
+    [clojure.contrib.str-utils2 :as su])
+  (:use
+    clojure.contrib.def
+    [fleet runtime util]))
 
 (defn- consume)
 

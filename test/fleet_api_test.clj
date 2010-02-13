@@ -1,7 +1,5 @@
 (ns fleet-api-test
-  (:use
-    [clojure.test]
-    [fleet]))
+  (:use clojure.test fleet))
 
 (def test-posts [{:body "First post."}
                  {:body "Second post."}])

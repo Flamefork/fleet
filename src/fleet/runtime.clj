@@ -1,7 +1,7 @@
 (ns fleet.runtime
   (:import
     [clojure.lang Sequential IObj]
-    [fleet.util CljString]))
+    fleet.util.CljString))
 
 (defn- escaped-with
   [s]
