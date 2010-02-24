@@ -1,5 +1,5 @@
 (defproject
-  fleet "0.9.2-SNAPSHOT"
+  fleet "0.9.2"
   :description "Templating System for Clojure"
   :url "http://github.com/Flamefork/fleet"
 
