@@ -72,7 +72,7 @@ Template function creation conventions:
 — When it's called with one arguments both symbols (fn-name and data) are bound to same value of this argument.  
 — When it's called with no arguments both symbols (fn-name and data) are bound to nil.
 
-Filters argument is vector of `file-filter escape-fn` pairs used to filter which files to process and with which escaping function.
+Filters argument is vector of `file-filter escaping-fn` pairs used to filter which files to process and with which escaping function.
 File filters could be defined as function, string, regex, :fleet or :all.  
 — Function should have Boolean type and one File argument.  
 — String filter definition treated as `*.string.fleet` mask, e.g. `"js"` mask will match `update.js.fleet`.  

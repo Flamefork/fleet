@@ -1,9 +1,13 @@
-(ns fleet.util)
+(ns fleet.util
+  (:require clojure.contrib.lazy-xml))
 
 (defn bypass
   "Just returns it's argument"
   [arg]
   arg)
+
+(def escape-xml
+  clojure.contrib.lazy-xml/escape-xml)
 
 (defn escape-clj-string
   "Escapes Clojure string."

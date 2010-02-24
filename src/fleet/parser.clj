@@ -2,16 +2,14 @@
   (:import
     java.util.regex.Pattern)
   (:require
-    [clojure.zip :as z])
-  (:use
-    clojure.contrib.def))
+    [clojure.zip :as z]))
 
 ;;;;;;;;;; lexer ;;;;;;;;;;
 
-(defvar- escaped-tokens
+(def #^{:private true} escaped-tokens
     #{"\\)>" "\\\">" "\\<(" "\\<\""})
 
-(defvar- token-regexs {
+(def #^{:private true} token-regexs {
   true  (Pattern/compile (str "^(.*?)(\\)>|\">|\\\\\\)>|\\\\\">)") Pattern/DOTALL)
   false (Pattern/compile (str "^(.*?)(<\\(|<\"|\\\\<\\(|\\\\<\")") Pattern/DOTALL)})
 
@@ -34,7 +32,7 @@
   [s]
   (if (escaped-tokens s) (.substring s 1) s))
 
-(defvar- consumers {
+(def #^{:private true} consumers {
   true {
     ")>"  (fn [_ loc] [false (-> loc z/up z/up)])
     "\">" (fn [_ loc] [false (-> loc (z/append-child [:tpl []]) z/down z/rightmost z/down z/rightmost)])
@@ -52,7 +50,7 @@
     (if (first tokens)
       (let [token (first tokens)
             mc (consumers mode)
-            consumer (mc token (mc :text))
+            consumer (mc token (:text mc))
             [mode loc] (consumer token loc)]
         (recur (rest tokens) mode loc))
       (first (z/root loc)))))

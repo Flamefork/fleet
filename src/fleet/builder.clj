@@ -2,16 +2,15 @@
   (:require
     [clojure.contrib.str-utils2 :as su])
   (:use
-    clojure.contrib.def
     [fleet runtime util]))
 
-(defn- consume)
+(declare consume)
 
-(defvar- consumers {
+(def #^{:private true} consumers {
   :text  #(str "(raw \"" (escape-clj-string %) "\")")
   :clj   bypass
-  :embed #(apply str ["(screen (" (apply str (map consume %)) "))"])
-  :tpl   #(apply str ["(screen [" (apply str (map consume %)) "])"])
+  :embed #(str "(screen (" (apply str (map consume %)) "))")
+  :tpl   #(str "(screen [" (apply str (map consume %)) "])")
   })
 
 (defn- consume

@@ -4,7 +4,7 @@
     [clojure.test]
     [fleet.runtime]))
 
-(def escape-fn clojure.contrib.lazy-xml/escape-xml)
+(def escaping-fn clojure.contrib.lazy-xml/escape-xml)
 
 (deftest raw-test
   (let [s "qwe<br>asd"]
@@ -14,23 +14,23 @@
 
 (deftest different-fns-raw-test
   (let [s "qwe<br>asd"]
-    (is (raw? escape-fn (raw escape-fn s)))
-    (is (not (raw? escape-fn (raw str s))))))
+    (is (raw? escaping-fn (raw escaping-fn s)))
+    (is (not (raw? escaping-fn (raw str s))))))
 
 (deftest screen-obj-test
   (let [s "qwe<br>asd"]
     (is (=
-      (screen escape-fn s)
+      (screen escaping-fn s)
       "qwe&lt;br&gt;asd"))
     (is (=
-      (screen escape-fn (raw escape-fn s))
+      (screen escaping-fn (raw escaping-fn s))
       "qwe<br>asd"))
-    (is (raw? escape-fn (screen escape-fn s)))
-    (is (raw? escape-fn (screen escape-fn (raw escape-fn s))))))
+    (is (raw? escaping-fn (screen escaping-fn s)))
+    (is (raw? escaping-fn (screen escaping-fn (raw escaping-fn s))))))
 
 (deftest screen-seq-test
-  (let [s ["qwe<br>asd" " " (raw escape-fn "qwe<br>asd")]]
+  (let [s ["qwe<br>asd" " " (raw escaping-fn "qwe<br>asd")]]
     (is (=
-      (screen escape-fn s)
+      (screen escaping-fn s)
       "qwe&lt;br&gt;asd qwe<br>asd"))
-    (is (raw?  escape-fn (screen escape-fn s)))))
+    (is (raw?  escaping-fn (screen escaping-fn s)))))

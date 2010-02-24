@@ -5,7 +5,7 @@
 
 (defn- escaped-with
   [s]
-  (or (-> s meta :escaped-with) {}))
+  (:escaped-with (meta s) {}))
 
 (defn raw
   "Prevent encoding of string."
@@ -17,7 +17,7 @@
 
 (defn raw?
   [f s]
-  ((escaped-with s) f))
+  (get (escaped-with s) f))
 
 (defmulti screen
   "Process and collect template string(s)."
@@ -36,9 +36,9 @@
   (raw f (str s)))
 
 (defn make-runtime
-  "Create runtime functions applied to specified escape-fn."
-  [escape-fn]
-  { :raw    (partial raw escape-fn)
-    :raw?   (partial raw? escape-fn)
-    :screen (partial screen escape-fn)
+  "Create runtime functions applied to specified escaping-fn."
+  [escaping-fn]
+  { :raw    (partial raw    escaping-fn)
+    :raw?   (partial raw?   escaping-fn)
+    :screen (partial screen escaping-fn)
     })
