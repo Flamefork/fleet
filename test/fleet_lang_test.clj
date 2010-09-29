@@ -1,5 +1,7 @@
 (ns fleet-lang-test
-  (:use clojure.test fleet))
+  (:use
+    clojure.test
+    fleet))
 
 (defmacro fileet
   "Convinient way to define test templates"

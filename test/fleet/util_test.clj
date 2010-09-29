@@ -1,9 +1,9 @@
 (ns fleet.util-test
   (:use
-    [clojure.test]
-    [fleet.util])
+    clojure.test
+    fleet.util)
   (:import
-    [fleet.util CljString]))
+    fleet.util.CljString))
 
 
 (deftest clj-string-with-meta-test

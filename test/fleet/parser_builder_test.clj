@@ -1,6 +1,6 @@
 (ns fleet.parser-builder-test
   (:use
-    [clojure.test]
+    clojure.test
     [fleet parser builder]))
 
 (deftest parse-test

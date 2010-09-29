@@ -1,10 +1,11 @@
 (ns fleet.runtime-test
-  (:require clojure.contrib.lazy-xml)
+  (:require fleet.util)
   (:use
-    [clojure.test]
-    [fleet.runtime]))
+    clojure.test
+    fleet.runtime))
 
-(def escaping-fn clojure.contrib.lazy-xml/escape-xml)
+(def escaping-fn
+  fleet.util/escape-xml)
 
 (deftest raw-test
   (let [s "qwe<br>asd"]

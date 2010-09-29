@@ -1,14 +1,17 @@
-(ns fleet.util
-  (:require clojure.contrib.lazy-xml))
+(ns fleet.util)
 
 (defn bypass
   "Just returns it's argument"
   [arg]
   arg)
 
-(def escape-xml
-  clojure.contrib.lazy-xml/escape-xml)
-
+;; copied from v1.1 clojure.contrib.lazy-xml
+(def #^{:private true}
+     escape-xml-map
+     (zipmap "'<>\"&" (map #(str \& % \;) '[apos lt gt quot amp])))
+(defn escape-xml [text]
+  (apply str (map #(escape-xml-map % %) (.toString text))))
+  
 (defn escape-clj-string
   "Escapes Clojure string."
   [s]
