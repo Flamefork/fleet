@@ -1,6 +1,6 @@
 (ns fleet.builder
   (:require
-    [clojure.contrib.str-utils2 :as su])
+    [clojure.string :as str])
   (:use
     [fleet runtime util]))
 
@@ -23,6 +23,6 @@
   "Build Clojure forms from template-str."
   [args ast]
   (str
-    "(fn [runtime " (su/join " " args) "] "
+    "(fn [runtime " (str/join " " args) "] "
     "(let [{:keys [raw raw? screen]} runtime] "
     (consume ast) "))"))
