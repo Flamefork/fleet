@@ -2,7 +2,7 @@
   (:import
     java.io.File)
   (:require
-    [clojure.contrib.str-utils2 :as su]))
+    [clojure.string :as cs]))
 
 (defn- ns-from-path
   [path]
@@ -14,8 +14,8 @@
 (defn- names-from-filename
   "Make (post-html-fleet post-html post) from 'post.html.fleet'"
   [filename]
-  (map #(ns-from-path (su/join \. %))
-    (loop [s (su/split filename #"\.")
+  (map #(ns-from-path (cs/join \. %))
+    (loop [s (cs/split filename #"\.")
            names []]
       (if (nil? s)
         names

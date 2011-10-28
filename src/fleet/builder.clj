@@ -1,6 +1,6 @@
 (ns fleet.builder
   (:require
-    [clojure.contrib.str-utils2 :as su])
+    [clojure.string :as su])
   (:use
     [fleet runtime util]))
 

@@ -3,7 +3,7 @@ pom.xml
 classes
 lib
 fleet.jar
-
+.lein-failures
 
 *.iml
 .idea
