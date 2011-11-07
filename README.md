@@ -94,8 +94,10 @@ Use `raw` function to prevent encoding: `<(raw "<br/>")>`.
 Use `str` function to place value `<(str posts-count)>`.
 
 This seems to be complete system, but writing something like
+
     <(raw (for [p posts]
       (str "<li class=\"post\">" (p :title) "</li>")))>
+      
 is too ugly..  
 And defining `<li class="post"><(p :title)></li>` as separate template
 can be overkill in many cases. So there should be the way of embedding strings and anonymous templates.
@@ -103,19 +105,22 @@ can be overkill in many cases. So there should be the way of embedding strings a
 ### Slipway construction `"><"` intended for embedding strings.
 
 The previous example could be rewritten using Slipway as
+
     <(for [p posts] ">
       <li class="post"><(p :title)></li>
     <")>
 
 This example has two points worth mentioning.
-Result of `"><"` construction processing is expression with String type.
+Result of `"><"` construction processing is an expression of String type.
 Strings in Slipway concidered `raw` by default.
 
 Next case is something like this:
+
     <(raw (map (fn [post]
       (str "<li class=\"post\">" (post :title) "</li>")) posts))>
 
 With Slipway it can be replaced with
+
     <(map (fn [post] ">
       <li class="post"><(post :title)></li>
     <") posts)>
@@ -130,9 +135,12 @@ so use `\<(` and `\<"` only outside embedded clojure code,  `\">` and `\)>` only
 
 ## Examples
 
+This is not intended to work out-of-box, only to show some bits of a language / system.
+
 ### Language
 
 Template file (`post_dedicated.fleet`):
+
     <head>
       <title><(post :title)></title>
 
@@ -168,6 +176,7 @@ Template file (`post_dedicated.fleet`):
     </html>
 
 Clojure:
+
     (deftemplate post-page [post] "post_dedicated")
     
     (footer)
@@ -177,22 +186,28 @@ Clojure:
 ### API
 
 Low-level:
+
     (def footer (fleet "<p>&copy; <(.get (Calendar/getInstance) Calendar/YEAR)> Flamefork</p>"))
 
 High-level:
 
 Directory tree
+
     root_dir/
       first_subdir/
         file_a.html.fleet
         file_b.html.fleet
       second_subdir/
         file_c.html.fleet
+        
 will be treated and processed by `(fleet-ns templates "path/to/root_dir" [:fleet :xml])` as functions
+
     templates.first-subdir/file-a
     templates.first-subdir/file-b
     templates.second-subdir/file-c
+    
 and (for example) first function will be like
+
     (defn file-a
       ([file-a data] ...)
       ([file-a] (recur file-a file-a)))
