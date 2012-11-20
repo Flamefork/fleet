@@ -17,92 +17,38 @@ Because
 — close to Clojure  
 — and I hate writing HTML not in HTML (clj-html, haml, etc).
 
-So I've started by reviewing few Clojure and CL implementations of ERB/JSP-like templates. Their syntax looks like  
-`<p><%= (post :body) %></p>`  
-or  
-`<p><?clj (post :body) ?></p>`  
-Also, in order to prevent XSS attacks, one needs to append some `escape-xml` function call to all this code:  
-`<p><%= (escape-html (post :body)) %></p>` or (Rails-like) `<p><%=(h(post :body))%></p>`  
-10 chars `<%=(h())%>` just to safely insert expression value seems to be a little too much...
+## Brief
 
-Then I realized that the following syntax is usable:  
-`<p><(post :body)></p>`  
-Not a big deal, but... that's all. Really, `<%= (escape-html ...` is here, and all other constructions
-are here too.
+Write
 
-Rails-like partials like  
-`<%= render :partial => 'post', :collection => posts %>`  
-are here too:  
-`<(map post-tpl posts)>`  
-...just plain Clojure code.
+    <p><(post :body)></p>
 
-Need to bypass escaping?  
-`<(raw "<script>alert('Hello!')</script>")>`
+instead of
 
-Not writing HTML at all? Use fleet with default (bypassing) escape function.  
-Use some `escape-mylang` to work with other languages.
-
-## API
-
-### Single anonymous template: `fleet`
-
-`(fleet [& args] template-str options)`
-
-Creates anonymous function from `template-str` using provided `options` map.
-
-Main option is `:escaping`. It can be function of one String argument or keyword specifying one of predefined functions:  
-`:bypass` — default, no escaping;  
-`:xml` — XML (or HTML) rules;  
-`:str` — Java-compatible string escaping;  
-`:clj-str` — Clojure string escaping (`\n` is allowed);  
-`:regex` — Escaping of Regex special symbols.
-
-Options `:file-name` and `:file-path` of type String are used for error reporting (e.g. file-name will be in stacktrace along with line number).
-
-### Template namespace: `fleet-ns`
-
-`(fleet-ns root-ns root-path filters)`
-
-Treats `root-path` as root of template namespace with prefix `root-ns.` and creates template functions
-for each file in it with name and samespace according to relative path.
-
-Template function creation conventions:   
-— Several functions will be created for each file. E.g. file `posts.html.fleet` will produce 3 functions: `posts`, `posts-html` and `posts-html-fleet`.  
-— Template function will take one or two arguments: first named same as shortest function name for file (`posts` in previous example) and second named `data`.  
-— When it's called with one arguments both symbols (fn-name and data) are bound to same value of this argument.  
-— When it's called with no arguments both symbols (fn-name and data) are bound to nil.
-
-Filters argument is vector of `file-filter escaping-fn` pairs used to filter which files to process and with which escaping function.
-File filters could be defined as function, string, regex, :fleet or :all.  
-— Function should have Boolean type and one File argument.  
-— String filter definition treated as `*.string.fleet` mask, e.g. `"js"` mask will match `update.js.fleet`.  
-— Regex filter matches whole filename, e.g. `#".*.html"` will match `posts.html`.  
-— `:fleet` filter is treated as "others". If it is set all `*.fleet` files will be processed.  
-— `:all` means, literally, all.
+    <p><%= (escape-html (post :body)) %></p>
 
 ## Template Language
 
 ### Main Fleet construction is Spaceship `<()>`.
 
-...just cause (star)fleet consists of many spaceships.
+...just because (star)fleet consists of many spaceships.
 
-`<()>` is almost equivalent to `()`, so
+`<()>` is almost equivalent to `()` in Clojure, so
 `<h1><(body)></h1>` in Fleet is nearly the same as `(str "<h1>" (body) "</h1>")` in Clojure.
 
 The only difference is that `(body)` output gets escaped (e.g. html-encoded to prevent XSS).  
-Use `raw` function to prevent encoding: `<(raw "<br/>")>`.  
-Use `str` function to place value `<(str posts-count)>`.
+Use `raw` function to prevent escaping: `<(raw "<br/>")>`.  
+Use `str` function to place value `<(str posts-count)>` instead of calling a function.
 
-This seems to be complete system, but writing something like
+This is almost all we need, with one issue: writing something like
 
     <(raw (for [p posts]
       (str "<li class=\"post\">" (p :title) "</li>")))>
       
-is too ugly..  
-And defining `<li class="post"><(p :title)></li>` as separate template
-can be overkill in many cases. So there should be the way of embedding strings and anonymous templates.
+is too ugly, and defining `<li class="post"><(p :title)></li>` as separate template
+can be overkill in many cases. So there should be the good way of embedding strings and anonymous templates.
 
-### Slipway construction `"><"` intended for embedding strings.
+### Slipway construction `"><"` is for embedding strings.
 
 The previous example could be rewritten using Slipway as
 
@@ -112,7 +58,7 @@ The previous example could be rewritten using Slipway as
 
 This example has two points worth mentioning.
 Result of `"><"` construction processing is an expression of String type.
-Strings in Slipway concidered `raw` by default.
+Strings in Slipway considered `raw` by default.
 
 Next case is something like this:
 
@@ -125,7 +71,66 @@ With Slipway it can be replaced with
       <li class="post"><(post :title)></li>
     <") posts)>
 
-Need to mention that all this supports lexical scoping and other Clojure fectures just like reference (previous) expression.
+Need to mention that all this supports lexical scoping and other Clojure features just like reference (previous) expression.
+
+## Functions
+
+### Single anonymous template: `fleet`
+
+    (fleet [& args] template-str options)
+
+Creates anonymous function from `template-str` using provided `options` map. Intended to use just like `(fn` construct.
+
+Example:
+
+    (def footer (fleet "<p>&copy; <(year (now))> Your Company</p>"))
+    (println (footer))
+    
+    (def header (fleet [title] "<head><title><(str title)></title></head>"))
+    (println (header "Main Page"))
+
+Main option is `:escaping`. It can be function of one String argument or keyword specifying one of predefined functions:  
+`:bypass` — default, no escaping;  
+`:xml` — XML (or HTML) rules;  
+`:str` — Java-compatible string escaping;  
+`:clj-str` — Clojure string escaping (`\n` is allowed);  
+`:regex` — Escaping of Regex special symbols.
+
+Options `:file-name` and `:file-path` (both String) are in place for better stack traces.
+
+### Template namespace: `fleet-ns`
+
+    (fleet-ns root-ns root-path filters)
+
+Treats `root-path` as root of template directory tree, maps it to namespace with prefix `root-ns.`, creates template functions
+for each file in it with name and samespace according to relative path.
+
+Example:
+
+    (fleet-ns view "path/to/view_dir" [:fleet :xml])
+
+Template functions are created by the following rules:
+
+— Several equal functions will be created for each file. E.g. file `posts.html.fleet` will produce 3 functions: `posts`, `posts-html` and `posts-html-fleet`.
+
+This is useful for cases where you have `posts.html.fleet` and `posts.json.fleet`, so you may access distinct templates as `posts-html` and `posts-json`,
+while and if you have only one `posts.html.fleet` you could call it `posts` conviniently.
+
+— Template function will take one or two arguments: first named same as shortest function name for file (`posts` in previous example) and second named `data`.
+
+When it's called with one arguments both symbols (fn-name and data) are bound to same value of this argument.  
+When it's called with no arguments both symbols (fn-name and data) are bound to nil.  
+This is also for convinience: you could use name appropriate to usage: e.g. if your template renders post, you could use `post` param name,
+and if template renders some complex data you could use `data`.
+Also you can mix&match, for example `post` as main rendered entity and `data` as some render options.
+
+Filters argument is vector of `file-filter escaping-fn` pairs used to filter which files to process and with which escaping function.
+File filters could be defined as function, string, regex, `:fleet` or `:all`.  
+— Function should have Boolean type and one File argument.  
+— String filter definition treated as `*.string.fleet` mask, e.g. `"js"` mask will match `update.js.fleet`.  
+— Regex filter matches whole filename, e.g. `#".*.html"` will match `posts.html`.  
+— `:fleet` filter is treated as "others". If it is set all `*.fleet` files will be processed.  
+— `:all` means, literally, all.
 
 ### More on escaping
 
@@ -177,17 +182,17 @@ Template file (`post_dedicated.fleet`):
 
 Clojure:
 
-    (deftemplate post-page [post] "post_dedicated")
-    
-    (footer)
+    (def post-page (fleet [post] (slurp "post_dedicated.fleet")))
 
     (post-page p)
+    
+    (footer)
 
 ### API
 
 Low-level:
 
-    (def footer (fleet "<p>&copy; <(.get (Calendar/getInstance) Calendar/YEAR)> Flamefork</p>"))
+    (def footer (fleet "<p>&copy; <(year (now))> Flamefork</p>"))
 
 High-level:
 
