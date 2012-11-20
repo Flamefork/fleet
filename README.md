@@ -20,12 +20,14 @@ Because
 ## Brief
 
 Write
-
-    <p><(post :body)></p>
-
+```clojure
+<p><(post :body)></p>
+```
 instead of
-
-    <p><%= (escape-html (post :body)) %></p>
+```clojure
+<p><%= (escape-html (post :body)) %></p>
+```
+Read on for more goodness.
 
 ## Template Language
 
@@ -33,7 +35,7 @@ instead of
 
 ...just because (star)fleet consists of many spaceships.
 
-`<()>` is almost equivalent to `()` in Clojure, so
+`<()>` is almost equivalent to Clojure's `()`, so
 `<h1><(body)></h1>` in Fleet is nearly the same as `(str "<h1>" (body) "</h1>")` in Clojure.
 
 The only difference is that `(body)` output gets escaped (e.g. html-encoded to prevent XSS).  
@@ -41,35 +43,38 @@ Use `raw` function to prevent escaping: `<(raw "<br/>")>`.
 Use `str` function to place value `<(str posts-count)>` instead of calling a function.
 
 This is almost all we need, with one issue: writing something like
-
-    <(raw (for [p posts]
-      (str "<li class=\"post\">" (p :title) "</li>")))>
-      
+```clojure
+<(raw (for [p posts]
+  (str "<li class=\"post\">" (p :title) "</li>")))>
+```
 is too ugly, and defining `<li class="post"><(p :title)></li>` as separate template
 can be overkill in many cases. So there should be the good way of embedding strings and anonymous templates.
 
 ### Slipway construction `"><"` is for embedding strings.
 
 The previous example could be rewritten using Slipway as
-
+```clojure
     <(for [p posts] ">
       <li class="post"><(p :title)></li>
     <")>
+```
 
 This example has two points worth mentioning.
 Result of `"><"` construction processing is an expression of String type.
 Strings in Slipway considered `raw` by default.
 
 Next case is something like this:
-
+```clojure
     <(raw (map (fn [post]
       (str "<li class=\"post\">" (post :title) "</li>")) posts))>
+```
 
 With Slipway it can be replaced with
-
+```clojure
     <(map (fn [post] ">
       <li class="post"><(post :title)></li>
     <") posts)>
+```
 
 Need to mention that all this supports lexical scoping and other Clojure features just like reference (previous) expression.
 
@@ -77,17 +82,21 @@ Need to mention that all this supports lexical scoping and other Clojure feature
 
 ### Single anonymous template: `fleet`
 
-    (fleet [& args] template-str options)
+```clojure
+(fleet [& args] template-str options)
+```
 
 Creates anonymous function from `template-str` using provided `options` map. Intended to use just like `(fn` construct.
 
 Example:
 
-    (def footer (fleet "<p>&copy; <(year (now))> Your Company</p>"))
-    (println (footer))
-    
-    (def header (fleet [title] "<head><title><(str title)></title></head>"))
-    (println (header "Main Page"))
+```clojure
+(def footer (fleet "<p>&copy; <(year (now))> Your Company</p>"))
+(println (footer))
+
+(def header (fleet [title] "<head><title><(str title)></title></head>"))
+(println (header "Main Page"))
+```
 
 Main option is `:escaping`. It can be function of one String argument or keyword specifying one of predefined functions:  
 `:bypass` — default, no escaping;  
@@ -100,14 +109,18 @@ Options `:file-name` and `:file-path` (both String) are in place for better stac
 
 ### Template namespace: `fleet-ns`
 
-    (fleet-ns root-ns root-path filters)
+```clojure
+(fleet-ns root-ns root-path filters)
+```
 
 Treats `root-path` as root of template directory tree, maps it to namespace with prefix `root-ns.`, creates template functions
 for each file in it with name and samespace according to relative path.
 
 Example:
 
-    (fleet-ns view "path/to/view_dir" [:fleet :xml])
+```clojure
+(fleet-ns view "path/to/view_dir" [:fleet :xml])
+```
 
 Template functions are created by the following rules:
 
@@ -146,77 +159,99 @@ This is not intended to work out-of-box, only to show some bits of a language / 
 
 Template file (`post_dedicated.fleet`):
 
-    <head>
-      <title><(post :title)></title>
+```clojure
+<head>
+  <title><(post :title)></title>
 
-      <(stylesheet :main)>
-      <(raw "<script>alert('Hello!')</script>")>
-    </head>
-    <body>
-    
-    <p><(str notice)></p>
-    
-    <p>Spaceship \<()> is landing.</p>
-    
-    <(
-    ; Begin of post
-    )>
-    <(inside-frame (let [p post] ">
-      Author: <(p :author)><br/>
-      Date: <(p :date)><br/>
-    <"))>
+  <(stylesheet :main)>
+  <(raw "<script>alert('Hello!')</script>")>
+</head>
+<body>
 
-    <p><(post :body)></p>
-    <ul>
-      <(for [tag (post :tags] ">
-        <li><(str tag)></li>
-      <")>
-    </ul>
-    <(
-    ; End of post
-    )>
+<p><(str notice)></p>
 
-    <(footer)>
-    </body>
-    </html>
+<p>Spaceship \<()> is landing.</p>
+
+<(
+; Begin of post
+)>
+<(inside-frame (let [p post] ">
+  Author: <(p :author)><br/>
+  Date: <(p :date)><br/>
+<"))>
+
+<p><(post :body)></p>
+<ul>
+  <(for [tag (post :tags] ">
+    <li><(str tag)></li>
+  <")>
+</ul>
+<(
+; End of post
+)>
+
+<(footer)>
+</body>
+</html>
+```
 
 Clojure:
 
-    (def post-page (fleet [post] (slurp "post_dedicated.fleet")))
+```clojure
+(def post-page (fleet [post] (slurp "post_dedicated.fleet")))
 
-    (post-page p)
-    
-    (footer)
+(post-page p)
+
+(footer)
+```
 
 ### API
 
 Low-level:
 
-    (def footer (fleet "<p>&copy; <(year (now))> Flamefork</p>"))
+```clojure
+(def footer (fleet "<p>&copy; <(year (now))> Flamefork</p>"))
+```
 
 High-level:
 
 Directory tree
 
-    root_dir/
-      first_subdir/
-        file_a.html.fleet
-        file_b.html.fleet
-      second_subdir/
-        file_c.html.fleet
+```
+root_dir/
+  first_subdir/
+    file_a.html.fleet
+    file_b.html.fleet
+  second_subdir/
+    file_c.html.fleet
+```
         
 will be treated and processed by `(fleet-ns templates "path/to/root_dir" [:fleet :xml])` as functions
 
-    templates.first-subdir/file-a
-    templates.first-subdir/file-b
-    templates.second-subdir/file-c
+```
+templates.first-subdir/file-a
+templates.first-subdir/file-b
+templates.second-subdir/file-c
+```
     
 and (for example) first function will be like
 
-    (defn file-a
-      ([file-a data] ...)
-      ([file-a] (recur file-a file-a)))
-      ([] (recur nil nil)))
+```clojure
+(defn file-a
+  ([file-a data] ...)
+  ([file-a] (recur file-a file-a)))
+  ([] (recur nil nil)))
+```
+
+## Compatibility
+
+Use 0.9.x for Clojure 1.2, 1.3  
+Use 0.10.x for Clojure 1.4+
+
+## Roadmap
+
+- update Fleet with latest Clojure goodness [in progress]
+- support ClojureScript
 
 ## License
 
