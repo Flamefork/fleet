@@ -6,7 +6,7 @@
 
 (declare consume)
 
-(def #^{:private true} consumers {
+(def ^:private consumers {
   :text  #(str "(raw \"" (escape-clj-string %) "\")")
   :clj   bypass
   :embed #(str "(screen (" (apply str (map consume %)) "))")

@@ -9,36 +9,32 @@
 
 (defn raw
   "Prevent encoding of string."
-  [f s]
+  [escaping-fn s]
   (let [obj (-> s .toString CljString.)
-        new-escw (assoc (escaped-with s) f true)
+        new-escw (assoc (escaped-with s) escaping-fn true)
         new-meta (assoc (meta obj) :escaped-with new-escw)]
     (with-meta obj new-meta)))
 
 (defn raw?
-  [f s]
-  (get (escaped-with s) f))
+  [escaping-fn s]
+  (get (escaped-with s) escaping-fn))
 
-(defmulti screen
-  "Process and collect template string(s)."
-  (fn [f s] (class s)))
+(defprotocol Screenable
+  (screen [s escaping-fn] "Process and collect template string(s)."))
 
-(defmethod screen CharSequence
-  [f s]
-  (raw f (if (raw? f s) s (f s))))
+(extend CharSequence Screenable
+  {:screen (fn [s f] (raw f (if (raw? f s) s (f s))))})
 
-(defmethod screen Sequential
-  [f s]
-  (raw f (apply str (map (partial screen f) s))))
+(extend Sequential Screenable
+  {:screen (fn [s f] (raw f (apply str (map #(screen %1 f) s))))})
 
-(defmethod screen :default
-  [f s]
-  (raw f (str s)))
+(extend Object Screenable
+  {:screen (fn [s f] (raw f (str s)))})
 
 (defn make-runtime
   "Create runtime functions applied to specified escaping-fn."
   [escaping-fn]
-  { :raw    (partial raw    escaping-fn)
-    :raw?   (partial raw?   escaping-fn)
-    :screen (partial screen escaping-fn)
+  { :raw    (partial raw  escaping-fn)
+    :raw?   (partial raw? escaping-fn)
+    :screen #(screen %1 escaping-fn)
     })

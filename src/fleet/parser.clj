@@ -6,10 +6,10 @@
 
 ;;;;;;;;;; lexer ;;;;;;;;;;
 
-(def #^{:private true} escaped-tokens
+(def ^:private escaped-tokens
     #{"\\)>" "\\\">" "\\<(" "\\<\""})
 
-(def #^{:private true} token-regexs {
+(def ^:private token-regexs {
   true  (Pattern/compile (str "^(.*?)(\\)>|\">|\\\\\\)>|\\\\\">)") Pattern/DOTALL)
   false (Pattern/compile (str "^(.*?)(<\\(|<\"|\\\\<\\(|\\\\<\")") Pattern/DOTALL)})
 
@@ -32,7 +32,7 @@
   [s]
   (if (escaped-tokens s) (.substring s 1) s))
 
-(def #^{:private true} consumers {
+(def ^:private consumers {
   true {
     ")>"  (fn [_ loc] [false (-> loc z/up z/up)])
     "\">" (fn [_ loc] [false (-> loc (z/append-child [:tpl []]) z/down z/rightmost z/down z/rightmost)])

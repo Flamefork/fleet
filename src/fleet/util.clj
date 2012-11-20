@@ -6,7 +6,7 @@
   arg)
 
 ;; copied from v1.1 clojure.contrib.lazy-xml
-(def #^{:private true}
+(def ^:private
      escape-xml-map
      (zipmap "'<>\"&" (map #(str \& % \;) '[apos lt gt quot amp])))
 (defn escape-xml [text]

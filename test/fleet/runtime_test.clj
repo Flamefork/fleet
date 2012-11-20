@@ -21,17 +21,17 @@
 (deftest screen-obj-test
   (let [s "qwe<br>asd"]
     (is (=
-      (screen escaping-fn s)
+      (screen s escaping-fn)
       "qwe&lt;br&gt;asd"))
     (is (=
-      (screen escaping-fn (raw escaping-fn s))
+      (screen (raw escaping-fn s) escaping-fn)
       "qwe<br>asd"))
-    (is (raw? escaping-fn (screen escaping-fn s)))
-    (is (raw? escaping-fn (screen escaping-fn (raw escaping-fn s))))))
+    (is (raw? escaping-fn (screen s escaping-fn)))
+    (is (raw? escaping-fn (screen (raw escaping-fn s) escaping-fn)))))
 
 (deftest screen-seq-test
   (let [s ["qwe<br>asd" " " (raw escaping-fn "qwe<br>asd")]]
     (is (=
-      (screen escaping-fn s)
+      (screen s escaping-fn)
       "qwe&lt;br&gt;asd qwe<br>asd"))
-    (is (raw?  escaping-fn (screen escaping-fn s)))))
+    (is (raw? escaping-fn (screen s escaping-fn)))))

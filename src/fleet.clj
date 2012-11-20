@@ -19,7 +19,7 @@
     :regex   escape-regex
     escaping))
 
-(def #^{:private true} default-opts {
+(def ^:private default-opts {
   :escaping  :bypass
   :file-name "FLEET_TEMPLATE"
   :file-path nil

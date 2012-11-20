@@ -25,7 +25,7 @@
     ((fileet [post title] "first/test_tpl") test-post "Post Template")
     (readhtml "first/test_tpl"))))
 
-(deftest deftemplate-test
+(deftest def-name-fleet-test
   (def single-post (fleet [post] "<p><(post :body)></p>" {:escaping str}))
   (is (=
     (single-post test-post)
