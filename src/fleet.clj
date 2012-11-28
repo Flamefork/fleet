@@ -11,7 +11,7 @@
 
 (defn- escaping-fn
   [escaping]
-  (condp = escaping
+  (case escaping
     :bypass  bypass
     :str     escape-string
     :clj-str escape-clj-string
@@ -50,7 +50,7 @@
 
 (defn- filter-fn
   [filter]
-  (condp = filter
+  (case filter
     :all (constantly true)
     :fleet (filemask-fn nil)
     (condp instance? filter
