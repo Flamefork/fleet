@@ -1,6 +1,6 @@
 (ns fleet.runtime
   (:import
-    [clojure.lang Sequential IObj]
+    [clojure.lang Sequential]
     fleet.util.CljString))
 
 (defn- escaped-with
@@ -33,13 +33,17 @@
   nil
   (screen [_ _] nil))
 
-(def ^:dynamic *transDomain* "Translation (i18n) domain." nil)
-(def ^:dynamic translate (fn [in] (str "{fleet.runtime/translate unbound: '" in "'}")))
+(def ^clojure.lang.Keyword ^:dynamic *transDomain* "Translation (i18n) domain: Clojure keyword" nil)
+(def ^clojure.lang.IFn     ^:dynamic translate
+  (fn [escaping-fn in transDomain]
+    (assert false (str "{fleet.runtime/translate unbound, input: '" in "'}"))))
+
 (defn _
-  "Translation function; Will send the parameter to r18n and return the translated value as a string"
-  ([f word] (_ f word *transDomain*))
-  ([f word transDomain]
-    (translate f word transDomain)))
+  "Translation function shorthand: will call (translate escaping-fn word transDomain)."
+  ([escaping-fn word]
+    (translate escaping-fn word *transDomain*))
+  ([escaping-fn word transDomain]
+    (translate escaping-fn word transDomain)))
 
 (defn make-runtime
   "Create runtime functions applied to specified escaping-fn."
