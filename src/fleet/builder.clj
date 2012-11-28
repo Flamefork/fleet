@@ -23,5 +23,5 @@
   [args ast]
   (str
     "(fn [runtime " (su/join " " args) "] "
-    "(let [{:keys [raw raw? screen]} runtime] "
+    "(let [{:keys [raw raw? screen _]} runtime] "
     (consume ast) "))"))
