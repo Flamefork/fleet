@@ -33,9 +33,18 @@
   nil
   (screen [_ _] nil))
 
+(def ^:dynamic *transDomain* "Translation (i18n) domain." nil)
+(def ^:dynamic translate (fn [in] (str "{fleet.runtime/translate unbound: '" in "'}")))
+(defn _
+  "Translation function; Will send the parameter to r18n and return the translated value as a string"
+  ([f word] (_ f word *transDomain*))
+  ([f word transDomain]
+    (translate f word transDomain)))
+
 (defn make-runtime
   "Create runtime functions applied to specified escaping-fn."
   [escaping-fn]
-  {:raw  (partial raw  escaping-fn)
-   :raw? (partial raw? escaping-fn)
-   :screen #(screen %1 escaping-fn)})
+  {:raw    (partial raw  escaping-fn)
+   :raw?   (partial raw? escaping-fn)
+   :screen #(screen %1   escaping-fn)
+   :_      (partial _    escaping-fn)})
