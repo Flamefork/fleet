@@ -9,7 +9,7 @@
 (def ^:private
      escape-xml-map
      (zipmap "'<>\"&" (map #(str \& % \;) '[apos lt gt quot amp])))
-(defn escape-xml [text]
+(defn escape-xml [^Object text]
   (apply str (map #(escape-xml-map % %) (.toString text))))
   
 (defn escape-clj-string
@@ -52,4 +52,3 @@
   namespaces other than the current one."
   [ns & body]
   `(binding [*ns* (the-ns ~ns)] ~@body))
-

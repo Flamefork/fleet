@@ -14,10 +14,10 @@
   false (Pattern/compile (str "^(.*?)(<\\(|<\"|\\\\<\\(|\\\\<\")") Pattern/DOTALL)})
 
 (defn- token-seq
-  [input]
+  [^String input]
   (loop [input input, mode false, ast []]
     (let [found (re-find (re-matcher (token-regexs mode) input))
-          [pair text token] (or found [input input nil])
+          [^String pair ^String text token] (or found [input input nil])
           ast (if (empty? text) ast (conj ast text))]
       (if token
         (let [rest (.substring input (.length pair))
@@ -29,7 +29,7 @@
 ;;;;;;;;;; parser ;;;;;;;;;;
 
 (defn- unescape-token
-  [s]
+  [^String s]
   (if (escaped-tokens s) (.substring s 1) s))
 
 (def ^:private consumers {

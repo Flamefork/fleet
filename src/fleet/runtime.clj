@@ -9,7 +9,7 @@
 
 (defn raw
   "Prevent escaping of string by escaping-fn."
-  [escaping-fn s]
+  [escaping-fn ^Object s]
   (let [obj (-> s .toString CljString.)
         new-escw (assoc (escaped-with s) escaping-fn true)
         new-meta (assoc (meta obj) :escaped-with new-escw)]
