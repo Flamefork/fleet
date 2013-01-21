@@ -10,13 +10,6 @@ Templating System for Clojure
 0. Clojure is good :)
 0. HTML isn't the only language that needs templating.
 
-## Why Fleet?
-
-Because  
-— I wanted template engine for Clojure  
-— close to Clojure  
-— and I hate writing HTML not in HTML (clj-html, haml, etc).
-
 ## Brief
 
 Write
@@ -255,4 +248,4 @@ Use 0.10.x for Clojure 1.4+
 
 ## License
 
-Copyright (c) 2010 Ilia Ablamonov, released under the MIT license.
+Copyright (c) 2010 Ilia Ablamonov, released under the [MIT license](http://www.opensource.org/licenses/mit-license.php).

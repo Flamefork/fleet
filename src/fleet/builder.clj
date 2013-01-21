@@ -8,10 +8,9 @@
 
 (def ^:private consumers {
   :text  #(str "(raw \"" (escape-clj-string %) "\")")
-  :clj   bypass
   :embed #(str "(screen (" (apply str (map consume %)) "))")
   :tpl   #(str "(screen [" (apply str (map consume %)) "])")
-  })
+  :clj   bypass})
 
 (defn- consume
   [ast]

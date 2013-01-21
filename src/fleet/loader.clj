@@ -40,10 +40,9 @@
   (let [ns (ns-from-path (relative-path root (.getParentFile file)))]
     {:content (slurp (.getPath file))
      :names (names-from-filename (.getName file))
-     :ns ns
      :file-path (.getAbsolutePath file)
      :file-name (.getName file)
-     }))
+     :ns ns}))
 
 (defn make-tpl-infos
   [root-path file-filter]
