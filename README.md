@@ -1,5 +1,7 @@
 ### Fleet
 
+[![Build Status](https://travis-ci.org/Flamefork/fleet.png?branch=master)](https://travis-ci.org/Flamefork/fleet)
+
 Templating System for Clojure
 
 ## Gist
