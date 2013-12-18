@@ -24,6 +24,8 @@
   (screen [s escaping-fn] "Process and collect template string(s)."))
 
 (extend-protocol Screenable
+  nil
+    (screen [_ _] nil)
   CharSequence
     (screen [s f] (raw f (if (raw? f s) s (f s))))
   Sequential
