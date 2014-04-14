@@ -24,6 +24,8 @@
   (screen [s escaping-fn] "Process and collect template string(s)."))
 
 (extend-protocol Screenable
+  nil ;; make fleet work with nil, otherwise it will throw exceptions
+    (screen [_ _] nil)
   CharSequence
     (screen [s f] (raw f (if (raw? f s) s (f s))))
   Sequential
