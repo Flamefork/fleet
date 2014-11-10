@@ -6,6 +6,7 @@ classes
 lib
 fleet.jar
 .lein-failures
+.lein-repl-history
 
 *.iml
 .idea
