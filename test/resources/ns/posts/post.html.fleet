@@ -1,1 +1,1 @@
-<p class="body"><(post :body)></p>
+<p class="<(str "body")>"><(post :body)></p>

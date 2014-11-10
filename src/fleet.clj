@@ -69,8 +69,7 @@
     (doseq [ns (distinct (map :ns tpl-infos))]
       (create-ns (full-ns ns))
       (within-ns (full-ns ns)
-        (clojure.core/refer-clojure)
-        (use 'fleet)))
+        (clojure.core/refer-clojure)))
     (doseq [{:keys [ns names]} tpl-infos, n names]
       (intern (full-ns ns) n nil))))
 

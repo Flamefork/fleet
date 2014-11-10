@@ -24,14 +24,14 @@
   (screen [s escaping-fn] "Process and collect template string(s)."))
 
 (extend-protocol Screenable
-  nil ;; make fleet work with nil, otherwise it will throw exceptions
-    (screen [_ _] nil)
   CharSequence
     (screen [s f] (raw f (if (raw? f s) s (f s))))
   Sequential
     (screen [s f] (raw f (apply str (map #(screen %1 f) s))))
   Object
-    (screen [s f] (raw f (str s))))
+    (screen [s f] (raw f (str s)))
+  nil
+  (screen [_ _] nil))
 
 (defn make-runtime
   "Create runtime functions applied to specified escaping-fn."
