@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/Flamefork/fleet.png?branch=master)](https://travis-ci.org/Flamefork/fleet)
 
+[![Clojars Project](http://clojars.org/fleet/latest-version.svg)](http://clojars.org/fleet)
+
 Templating System for Clojure
 
 ## Gist
