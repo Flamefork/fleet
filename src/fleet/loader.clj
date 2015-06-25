@@ -29,8 +29,8 @@
 (defn- relative-path
   "File path relative to root. Only if file inside root."
   [^File root ^File file]
-  (let [file-path (.getCanonicalPath file)
-        root-path (.getCanonicalPath root)]
+  (let [file-path (.getAbsolutePath file)
+        root-path (.getAbsolutePath root)]
     (if (= file-path root-path)
       ""
       (path-diff root-path file-path))))
