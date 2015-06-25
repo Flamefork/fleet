@@ -1,4 +1,5 @@
-(ns fleet.util)
+(ns fleet.util
+  (:refer-clojure :exclude [replace]))
 
 (defn bypass
   "Just returns it's argument"
@@ -11,18 +12,24 @@
      (zipmap "'<>\"&" (map #(str \& % \;) '[apos lt gt quot amp])))
 (defn escape-xml [^Object text]
   (apply str (map #(escape-xml-map % %) (.toString text))))
-  
+
+(defn replace [^Object s ^CharSequence target ^CharSequence replacement]
+  (if (string? s)
+    (.replace ^String s target replacement)
+  ;else
+    (.replace ^fleet.util.CljString s target replacement)))
+
 (defn escape-clj-string
   "Escapes Clojure string."
   [s]
-  (.. s
+  (-> s
     (replace "\\" "\\\\")
     (replace "\"" "\\\"")))
 
 (defn escape-string
   "Escapes common string causes, like for Java or JS."
   [s]
-  (.. s
+  (-> s
     (replace "\\" "\\\\")
     (replace "\"" "\\\"")
     (replace "\n" "\\n")))
@@ -30,7 +37,7 @@
 (defn escape-regex
   "Escapes special Regex symbols."
   [s]
-  (.. s
+  (-> s
     (replace "\\" "\\\\")
     (replace "("  "\\(")
     (replace ")"  "\\)")

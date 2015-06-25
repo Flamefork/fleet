@@ -8,4 +8,5 @@
   :signing {:gpg-key "ilia@flamefork.ru"}
 
   :dependencies [[org.clojure/clojure "1.4.0"]]
+  :global-vars {*warn-on-reflection* true}
   :java-source-paths ["src"])

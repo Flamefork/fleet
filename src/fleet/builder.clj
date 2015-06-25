@@ -1,4 +1,5 @@
 (ns fleet.builder
+  (:refer-clojure :exclude [replace])
   (:require
     [clojure.string :as su])
   (:use

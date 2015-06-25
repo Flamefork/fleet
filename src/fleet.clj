@@ -1,4 +1,5 @@
 (ns fleet
+  (:refer-clojure :exclude [replace])
   (:import
     java.io.File
     java.util.regex.Pattern
@@ -46,7 +47,7 @@
 (defn- filemask-fn
   [type]
   (let [ext (str (if type (str "." type) "") ".fleet")]
-    #(.. % getName (endsWith ext))))
+    #(.. ^File % getName (endsWith ext))))
 
 (defn- filter-fn
   [filter]
@@ -56,7 +57,7 @@
     (condp instance? filter
       String (filemask-fn filter)
       IFn filter
-      Pattern #(re-matches filter (.getName %)))))
+      Pattern #(re-matches filter (.getName ^File %)))))
 
 (defn- build-ns
   [prefix name]
