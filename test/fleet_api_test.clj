@@ -1,4 +1,5 @@
 (ns fleet-api-test
+  (:refer-clojure :exclude [replace])
   (:use
     clojure.test
     fleet))
@@ -24,8 +25,8 @@
       (slurp "test/resources/ns/posts/posts.html")))))
 
 (deftest error-reporting-test
-  (let [e (is (thrown? ClassCastException (tpl.posts/exceptional)))
-        ste (first (.getStackTrace e))]
+  (let [^Throwable e (is (thrown? ClassCastException (tpl.posts/exceptional)))
+        ^StackTraceElement ste (first (.getStackTrace e))]
     (is (= (.getFileName ste) "exceptional.fleet"))
     (is (= (.getLineNumber ste) 4))))
 

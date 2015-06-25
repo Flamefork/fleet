@@ -1,4 +1,5 @@
 (ns fleet.util-test
+  (:refer-clojure :exclude [replace])
   (:use
     clojure.test
     fleet.util)
