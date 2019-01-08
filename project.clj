@@ -1,4 +1,4 @@
-(defproject fleet "0.10.2"
+(defproject org.clojars.touch/fleet "0.10.4"
   :description "Templating System for Clojure"
   :url "http://github.com/Flamefork/fleet"
   :scm {:name "git"
