@@ -35,15 +35,17 @@
 
 (def ^clojure.lang.Keyword ^:dynamic *transDomain* "Translation (i18n) domain: Clojure keyword" nil)
 (def ^clojure.lang.IFn     ^:dynamic translate
-  (fn [escaping-fn in transDomain]
+  (fn [escaping-fn in transDomain & args]
     (assert false (str "{fleet.runtime/translate unbound, input: '" in "'}"))))
 
 (defn _
   "Translation function shorthand: will call (translate escaping-fn word transDomain)."
   ([escaping-fn word]
-    (translate escaping-fn word *transDomain*))
+   (translate escaping-fn word *transDomain*))
   ([escaping-fn word transDomain]
-    (translate escaping-fn word transDomain)))
+   (translate escaping-fn word transDomain))
+  ([escaping-fn word transDomain & args]
+   (apply translate escaping-fn word transDomain args)))
 
 (defn make-runtime
   "Create runtime functions applied to specified escaping-fn."
